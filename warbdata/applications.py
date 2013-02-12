@@ -18,7 +18,7 @@ class ApplicationsData(DataRepository):
         app = Application.Application(**kwargs)
         self.session.add(app)
 
-        # To get a full user to return (get a working id)
+        # To get a full application to return (get a working id)
         self.session.flush()
 
         return app
