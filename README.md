@@ -37,7 +37,7 @@ Package contenant les modèles SQLAlchemy et les schéma Voluptuous nécessaires
 Package faisant office de couche d'intégrité pour la base de données. En charge
 de vérifier la cohérence des données qui intégreront la base de données.
 
-Est le seul package a avoir le droit (par convention) d'écrire (INSERT/UPDATE),
+Est le seul package à avoir le droit (par convention) d'écrire (INSERT/UPDATE)
 dans la base.
 
 ### warbbiz
@@ -49,3 +49,5 @@ Fait appel à warbdata pour insérer des données en base.
 
 Documentation
 -------------
+
+TODO
