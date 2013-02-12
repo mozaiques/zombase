@@ -34,14 +34,14 @@ class TestCreateUser(unittest.TestCase):
             login='wart',
             mail='a@b.c',
             hash_password=hashlib.sha1('12').hexdigest(),
-            permissions=set(('warbase', 'admin')),
+            permissions=[('warbase', 'admin')],
             firstname=u'Raphaël',
             lastname=u'Gràdübé',)
         self.assertEqual('wart', user.login)
         self.assertEqual('a@b.c', user.mail)
         self.assertEqual(u'Raphaël', user.firstname)
         self.assertEqual(u'Gràdübé', user.lastname)
-        self.assertEqual(set(('warbase', 'admin')), user.permissions)
+        self.assertEqual([('warbase', 'admin')], user.permissions)
 
     def test_no_mail(self):
         with self.assertRaises(MultipleInvalid):
@@ -50,6 +50,11 @@ class TestCreateUser(unittest.TestCase):
     def test_no_login(self):
         with self.assertRaises(MultipleInvalid):
             self.users_data.create(mail='a@b.c')
+
+    def test_add_permission(self):
+        user = self.users_data.create(
+            login='wart',
+            mail='a@b.c')
 
 
 if __name__ == '__main__':

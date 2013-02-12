@@ -22,8 +22,8 @@ d'un client.
 
 ### Dépendances
 
-* SQLAlchemy (0.8)
-* Voluptuous (0.6)
+* [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.8)
+* [Voluptuous](https://github.com/alecthomas/voluptuous) (0.6)
 
 Architecture
 ------------

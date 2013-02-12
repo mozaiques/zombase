@@ -18,12 +18,13 @@ class User(Base):
     firstname = Column(Unicode(length=30))
     lastname = Column(Unicode(length=30))
 
+PermissionSchema = Schema((str, str))
 
 UserSchema = Schema({
     Required('login'): All(str, Length(min=3, max=10)),
     Required('mail'): All(str, Length(min=3, max=50)),
     'hash_password': All(str, Length(min=40, max=40)),
-    'permissions': set,
+    'permissions': [PermissionSchema],
     'firstname': All(unicode, Length(min=3, max=30)),
     'lastname': All(unicode, Length(min=3, max=30)),
 })
