@@ -24,25 +24,6 @@ class UsersData(DataRepository):
 
         return user
 
-    def _get_user(self, **kwargs):
-        """Return a user given a user (other SQLA-Session) or a user_id."""
-        if 'user' in kwargs:
-            if not isinstance(kwargs['user'], User.User):
-                raise AttributeError('user provided is not a wb-User')
-
-            # Merging user which may come from another session
-            user = self.session.merge(kwargs['user'])
-
-        elif 'user_id' in kwargs:
-            user = self.session.query(User.User)\
-                .filter(User.User.id == kwargs['user_id'])\
-                .one()
-
-        else:
-            raise TypeError('User informations (user or user_id) not provided')
-
-        return user
-
     def add_permission(self, **kwargs):
         """Add a permission to a user.
 
