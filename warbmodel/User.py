@@ -5,7 +5,7 @@ from . import Base
 
 
 class User(Base):
-    __tablename__ = "wb_users"
+    __tablename__ = 'wb_users'
     id = Column(Integer, primary_key=True)
 
     # These two fields cannot be null
@@ -13,7 +13,7 @@ class User(Base):
     mail = Column(String(length=50), unique=True)
 
     hash_password = Column(String(length=40))  # sha1 hash, wo salt
-    permissions = Column(PickleType)  # Store set of tuple
+    permissions = Column(PickleType)  # Store list of tuple
 
     firstname = Column(Unicode(length=30))
     lastname = Column(Unicode(length=30))

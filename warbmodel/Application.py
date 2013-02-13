@@ -5,7 +5,7 @@ from . import Base
 
 
 class Application(Base):
-    __tablename__ = "wb_applications"
+    __tablename__ = 'wb_applications'
     id = Column(Integer, primary_key=True)
 
     # Internal use only
