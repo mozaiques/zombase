@@ -20,7 +20,7 @@ class Application(Base):
 
 ApplicationSchema = Schema({
     Required('name'): All(str, Length(min=3, max=30)),
-    Required('url'): All(str, Length(max=100), Url),
+    Required('url'): All(str, Length(max=100), Url()),
     Required('min_permission'): All(str, Length(min=1, max=10)),
     Required('title'): All(str, Length(min=1, max=30)),
     'picto': All(str, Length(max=30)),
