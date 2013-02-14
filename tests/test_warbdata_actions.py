@@ -27,7 +27,9 @@ class TestCreateAction(unittest.TestCase):
         Session = sessionmaker(bind=engine)
         warbmodel.Base.metadata.create_all(engine)
         self.session = Session()
-        self.actions_data = ActionsData(session=self.session, user=User.User())
+        self.actions_data = ActionsData(session=self.session,
+                                        user=User.User(),
+                                        application=Application.Application())
 
     def tearDown(self):
         del self.session

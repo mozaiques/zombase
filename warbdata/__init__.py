@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session as SQLA_Session
 from sqlalchemy.orm.exc import NoResultFound
 
-from warbmodel import User
+from warbmodel import User, Application
 
 
 class DataRepository():
@@ -28,11 +28,11 @@ class DataRepository():
                 raise AttributeError('user provided is not a wb-User')
 
             # Merging user which may come from another session
-            user = self.session.merge(kwargs['user'])
+            return self.session.merge(kwargs['user'])
 
         elif 'user_id' in kwargs:
             try:
-                user = self.session.query(User.User)\
+                return self.session.query(User.User)\
                     .filter(User.User.id == kwargs['user_id'])\
                     .one()
             except NoResultFound:
@@ -41,4 +41,25 @@ class DataRepository():
         else:
             raise TypeError('User informations (user or user_id) not provided')
 
-        return user
+    def _get_application(self, **kwargs):
+        """Return an application given an application (other SQLA-Session) or
+        an application_id."""
+        if 'application' in kwargs:
+            if not isinstance(kwargs['application'], Application.Application):
+                raise AttributeError(
+                    'application provided is not a wb-Application')
+
+            # Merging application which may come from another session
+            return self.session.merge(kwargs['application'])
+
+        elif 'application_id' in kwargs:
+            try:
+                app_id = kwargs['application_id']
+                return self.session.query(Application.Application)\
+                    .filter(Application.Application.id == app_id)\
+                    .one()
+            except NoResultFound:
+                raise AttributeError('application_id provided doesn\'t exist')
+
+        else:
+            raise TypeError('Application informations not provided')

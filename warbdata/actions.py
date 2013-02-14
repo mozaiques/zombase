@@ -18,9 +18,10 @@ class ActionsData(DataRepository):
     """
 
     def __init__(self, **kwargs):
-        """Associate user with class instance."""
+        """Associate user and application with class instance."""
         DataRepository.__init__(self, **kwargs)
         self.user = self._get_user(**kwargs)
+        self.application = self._get_application(**kwargs)
 
     def create(self, **kwargs):
         """Create and insert an application in DB.
@@ -29,7 +30,9 @@ class ActionsData(DataRepository):
         see warbmodel.Action.ApplicationSchema
 
         """
-        add_datas = {'datetime': datetime.now(), 'created_by': self.user}
+        add_datas = {'datetime': datetime.now(),
+                     'created_by': self.user,
+                     'application': self.application}
         kwargs = dict(kwargs.items() + add_datas.items())
         action_schema = Action.ActionSchema(kwargs)  # Validate datas
 
