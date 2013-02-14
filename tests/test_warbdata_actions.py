@@ -4,6 +4,7 @@ import hashlib
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from voluptuous import MultipleInvalid
 
 import warbmodel
@@ -17,7 +18,7 @@ class TestCreateActionsData(unittest.TestCase):
         Session = sessionmaker(bind=engine)
         warbmodel.Base.metadata.create_all(engine)
         self.session = Session()
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(NoResultFound):
             self.actions_data = ActionsData(session=self.session, user_id=1)
 
 

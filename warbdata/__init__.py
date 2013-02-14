@@ -31,12 +31,9 @@ class DataRepository():
             return self.session.merge(kwargs['user'])
 
         elif 'user_id' in kwargs:
-            try:
-                return self.session.query(User.User)\
-                    .filter(User.User.id == kwargs['user_id'])\
-                    .one()
-            except NoResultFound:
-                raise AttributeError('user_id provided doesn\'t exist')
+            return self.session.query(User.User)\
+                .filter(User.User.id == kwargs['user_id'])\
+                .one()
 
         else:
             raise TypeError('User informations (user or user_id) not provided')
