@@ -3,8 +3,10 @@ import unittest
 
 from warbmodel import Application, User
 
+from . import TestData
 
-class TestModelBase(unittest.TestCase):
+
+class TestModelBase(TestData):
 
     def test_application(self):
         application = Application.Application()

@@ -1,8 +1,6 @@
  # -*- coding: utf-8 -*-
 import unittest
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from voluptuous import MultipleInvalid
 
 import warbmodel
@@ -11,13 +9,13 @@ from warbdata.users import UsersData
 from warbdata.applications import ApplicationsData
 from warbbiz.users import UsersBusiness
 
+from . import TestData
 
-class TestGetAvailableApp(unittest.TestCase):
+
+class TestGetAvailableApp(TestData):
+
     def setUp(self):
-        engine = create_engine('sqlite:///:memory:', echo=False)
-        Session = sessionmaker(bind=engine)
-        warbmodel.Base.metadata.create_all(engine)
-        self.session = Session()
+        TestData.setUp(self)
         self.users_data = UsersData(session=self.session)
         self.apps_data = ApplicationsData(session=self.session)
         self.users_biz = UsersBusiness(session=self.session)
@@ -32,10 +30,6 @@ class TestGetAvailableApp(unittest.TestCase):
         self.user = self.users_data.add_permission(
             user=self.user,
             permission=('warfinance', 'view'))
-
-    def tearDown(self):
-        del self.session
-        del self.users_data
 
     def test_get_apps(self):
         apps = self.users_biz.get_applications(user_id=self.user.id)

@@ -11,29 +11,26 @@ import warbmodel
 from warbmodel import *
 from warbdata.actions import ActionsData
 
+from . import TestData
 
-class TestCreateActionsData(unittest.TestCase):
+
+class TestCreateActionsData(TestData):
+
     def test_wrong_user_id(self):
-        engine = create_engine('sqlite:///:memory:', echo=False)
-        Session = sessionmaker(bind=engine)
-        warbmodel.Base.metadata.create_all(engine)
-        self.session = Session()
         with self.assertRaises(NoResultFound):
             self.actions_data = ActionsData(session=self.session, user_id=1)
 
 
-class TestCreateAction(unittest.TestCase):
+class TestCreateAction(TestData):
+
     def setUp(self):
-        engine = create_engine('sqlite:///:memory:', echo=False)
-        Session = sessionmaker(bind=engine)
-        warbmodel.Base.metadata.create_all(engine)
-        self.session = Session()
+        TestData.setUp(self)
         self.actions_data = ActionsData(session=self.session,
                                         user=User.User(),
                                         application=Application.Application())
 
     def tearDown(self):
-        del self.session
+        TestData.tearDown(self)
         del self.actions_data
 
     def test_correct_create(self):

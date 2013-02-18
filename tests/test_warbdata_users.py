@@ -10,18 +10,14 @@ import warbmodel
 from warbmodel import *
 from warbdata.users import UsersData
 
+from . import TestData
 
-class TestCreateUser(unittest.TestCase):
+
+class TestCreateUser(TestData):
+
     def setUp(self):
-        engine = create_engine('sqlite:///:memory:', echo=False)
-        Session = sessionmaker(bind=engine)
-        warbmodel.Base.metadata.create_all(engine)
-        self.session = Session()
+        TestData.setUp(self)
         self.users_data = UsersData(session=self.session)
-
-    def tearDown(self):
-        del self.session
-        del self.users_data
 
     def test_correct_minimal_create(self):
         user = self.users_data.create(login='wart', mail='a@b.c')

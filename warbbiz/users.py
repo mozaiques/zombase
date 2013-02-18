@@ -14,7 +14,7 @@ class UsersBusiness(BusinessWorker):
         user_id = kwargs['user_id']
 
         # Could raise NoResultFound or MultipleResultsFound
-        user = self.ro_session.query(User.User)\
+        user = self.session.query(User.User)\
             .filter(User.User.id == user_id)\
             .one()
 
@@ -35,7 +35,7 @@ class UsersBusiness(BusinessWorker):
 
         available_apps = {}
 
-        apps = self.ro_session.query(Application.Application).all()
+        apps = self.session.query(Application.Application).all()
 
         for app in apps:
             if (app.name, app.min_permission) in user.permissions:

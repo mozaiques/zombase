@@ -5,15 +5,10 @@ from sqlalchemy.orm import sessionmaker
 
 import warbdata
 
+from . import TestData
 
-class DataRepository(unittest.TestCase):
-    def setUp(self):
-        engine = create_engine('sqlite:///:memory:', echo=True)
-        Session = sessionmaker(bind=engine)
-        self.session = Session()
 
-    def tearDown(self):
-        del self.session
+class DataRepository(TestData):
 
     def test_binding_session(self):
         with self.assertRaises(AttributeError):
