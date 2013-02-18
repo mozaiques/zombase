@@ -1,0 +1,6 @@
+SQLAlchemy==0.8.0b2
+argparse==1.2.1
+distribute==0.6.24
+psycopg2==2.4.6
+voluptuous==0.6
+wsgiref==0.1.2
