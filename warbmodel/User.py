@@ -9,8 +9,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
 
     # These two fields cannot be null
-    login = Column(String(length=10), unique=True)  # ASCII only
-    mail = Column(String(length=50), unique=True)
+    login = Column(String(length=10), unique=True, index=True)  # ASCII only
+    mail = Column(String(length=50), unique=True, index=True)
 
     hash_password = Column(String(length=40))  # sha1 hash, wo salt
     permissions = Column(PickleType)  # Store list of tuple
