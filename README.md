@@ -6,19 +6,11 @@ Introduction
 
 ### Contexte
 
-Ce package python (qui n'en n'est pas un mais seulement une collection de 3
-packages pure python) sert de base à certaines applications WArtisans.
-
-Son positionnement open source (licence MIT) ne sert pas à grand chose, si ce
-n'est à éviter de payer pour son hebergement sur Github.
-
-Si ce package peut être utile (pédagogie/adaptation à d'autres projets), c'est
-tant mieux !
+Ce package python sert de base à certaines applications WArtisans.
 
 ### Objectif
 
-Cette collection de package permet de gérer les utilisateurs et les applications
-d'un client.
+Ce package permet de gérer les utilisateurs et les applications d'un client.
 
 ### Dépendances
 
@@ -28,11 +20,11 @@ d'un client.
 Architecture
 ------------
 
-### warbmodel
+### warbase.model
 
 Package contenant les modèles SQLAlchemy et les schéma Voluptuous nécessaires.
 
-### warbdata
+### warbase.data
 
 Package faisant office de couche d'intégrité pour la base de données. En charge
 de vérifier la cohérence des données qui intégreront la base de données.
@@ -40,7 +32,7 @@ de vérifier la cohérence des données qui intégreront la base de données.
 Est le seul package à avoir le droit (par convention) d'écrire (INSERT/UPDATE)
 dans la base.
 
-### warbbiz
+### warbase.biz
 
 Package faisant office de couche business. C'est la seule API censée être
 utilisée.
