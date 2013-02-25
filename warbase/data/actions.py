@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from warbmodel import Action
+from warbase.model import Action
 
 from . import DataRepository
 
@@ -27,7 +27,7 @@ class ActionsData(DataRepository):
         """Create and insert an application in DB.
 
         Keyword arguments:
-        see warbmodel.Action.ApplicationSchema
+        see warbase.model.Action.ApplicationSchema
 
         """
         add_datas = {'datetime': datetime.now(),

@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session as SQLA_Session
 from sqlalchemy.orm.exc import NoResultFound
 
-from warbmodel import User, Application
+from warbase.model import User, Application
 
 
 class DataRepository():

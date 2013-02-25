@@ -1,4 +1,4 @@
-from warbmodel import User
+from warbase.model import User
 
 from . import DataRepository
 
@@ -29,7 +29,7 @@ class UsersData(DataRepository):
 
         Keyword arguments:
         permission -- valid permission tuple
-        user -- warbmodel.User.User instance
+        user -- warbase.model.User.User instance
         user_id -- id of the user
 
         """

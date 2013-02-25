@@ -1,5 +1,5 @@
 
-from warbmodel import User, Application
+from warbase.model import User, Application
 from . import BusinessWorker
 
 

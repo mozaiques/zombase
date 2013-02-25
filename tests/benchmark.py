@@ -5,11 +5,11 @@ import hashlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import warbmodel
-from warbmodel import *
-from warbdata.users import UsersData
-from warbdata.applications import ApplicationsData
-from warbbiz.users import UsersBusiness
+import warbase.model
+from warbase.model import *
+from warbase.data.users import UsersData
+from warbase.data.applications import ApplicationsData
+from warbase.biz.users import UsersBusiness
 
 
 class Benchmark():
@@ -18,13 +18,13 @@ class Benchmark():
         self.engine = create_engine(
             'postgres://testpgsql:testpgsqlp4ss@localhost/testpgsql')
         Session = sessionmaker(bind=self.engine)
-        warbmodel.Base.metadata.create_all(self.engine)
+        warbase.model.Base.metadata.create_all(self.engine)
         self.session = Session()
         self.users_data = UsersData(session=self.session)
 
     def tearDown(self):
         self.session.close()
-        warbmodel.Base.metadata.drop_all(self.engine)
+        warbase.model.Base.metadata.drop_all(self.engine)
 
     def run(self):
         t1 = time.time()

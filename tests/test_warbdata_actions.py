@@ -7,9 +7,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from voluptuous import MultipleInvalid
 
-import warbmodel
-from warbmodel import *
-from warbdata.actions import ActionsData
+import warbase.model
+from warbase.model import *
+from warbase.data.actions import ActionsData
 
 from . import TestData
 

@@ -3,11 +3,11 @@ import unittest
 
 from voluptuous import MultipleInvalid
 
-import warbmodel
-from warbmodel import *
-from warbdata.users import UsersData
-from warbdata.applications import ApplicationsData
-from warbbiz.users import UsersBusiness
+import warbase.model
+from warbase.model import *
+from warbase.data.users import UsersData
+from warbase.data.applications import ApplicationsData
+from warbase.biz.users import UsersBusiness
 
 from . import TestData
 

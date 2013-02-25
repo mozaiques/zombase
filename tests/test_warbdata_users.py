@@ -6,9 +6,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from voluptuous import MultipleInvalid
 
-import warbmodel
-from warbmodel import *
-from warbdata.users import UsersData
+import warbase.model
+from warbase.model import *
+from warbase.data.users import UsersData
 
 from . import TestData
 

@@ -1,7 +1,7 @@
  # -*- coding: utf-8 -*-
 import unittest
 
-from warbmodel import Application, User
+from warbase.model import Application, User
 
 from . import TestData
 

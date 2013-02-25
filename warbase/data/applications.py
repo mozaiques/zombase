@@ -1,4 +1,4 @@
-from warbmodel import Application
+from warbase.model import Application
 
 from . import DataRepository
 
@@ -10,7 +10,7 @@ class ApplicationsData(DataRepository):
         """Create and insert an application in DB.
 
         Keyword arguments:
-        see warbmodel.Application.ApplicationSchema
+        see warbase.model.Application.ApplicationSchema
 
         """
         app_schema = Application.ApplicationSchema(kwargs)  # Validate datas
