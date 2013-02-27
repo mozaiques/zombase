@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session as SQLA_Session
 from sqlalchemy.orm.exc import NoResultFound
 
-from warbase.model import User, Application
+from warbase.model import User, Application, ComputedValue
 
 
 class DataRepository():
@@ -60,3 +60,45 @@ class DataRepository():
 
         else:
             raise TypeError('Application informations not provided')
+
+    def _get_computed_value(self, **kwargs):
+        """Return an computed value given a key and a target_id"""
+        if 'key' not in kwargs or 'target_id' not in kwargs:
+            raise TypeError('Application informations not provided')
+        
+        if not isinstance(kwargs['key'], str):
+            raise AttributeError('key provided is not a string')
+
+        if not isinstance(kwargs['target_id'], int):
+            raise AttributeError('target_id provided is not an integer')
+
+        return self.session.query(ComputedValue.ComputedValue)\
+            .filter(ComputedValue.ComputedValue.key == kwargs['key'])\
+            .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
+            .one()
+
+    def _get_computed_values(self, **kwargs):
+        """Return a list computed value given a key prefix and a target_id"""
+        if 'key' not in kwargs or 'target_id' not in kwargs:
+            raise TypeError('Application informations not provided')
+        
+        if not isinstance(kwargs['key'], str):
+            raise AttributeError('key provided is not a string')
+
+        if not isinstance(kwargs['target_id'], int):
+            raise AttributeError('target_id provided is not an integer')
+
+        if kwargs['key'][-1] == ':':
+            computed_values = self.session.query(ComputedValue.ComputedValue)\
+                .filter(ComputedValue.ComputedValue.key.like(kwargs['key']+'%'))\
+                .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
+                .all()
+
+        else:
+            computed_value = self.session.query(ComputedValue.ComputedValue)\
+            .filter(ComputedValue.ComputedValue.key == kwargs['key'])\
+            .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
+            .one()
+            computed_values = [computed_value]
+        
+        return computed_values
