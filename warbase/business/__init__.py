@@ -2,7 +2,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session as SQLA_Session
 
 
-class BusinessWorker():
+class AbcBusinessWorker():
     """ABC for business objects.
 
     Provide a base with a fully functionnal SQLA-Session.

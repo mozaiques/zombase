@@ -7,7 +7,7 @@ import warbase.model
 from warbase.model import *
 from warbase.data.users import UsersData
 from warbase.data.applications import ApplicationsData
-from warbase.biz.users import UsersBusiness
+from warbase.biz import BusinessWorker
 
 from . import TestData
 
@@ -18,7 +18,7 @@ class TestGetAvailableApp(TestData):
         TestData.setUp(self)
         self.users_data = UsersData(session=self.session)
         self.apps_data = ApplicationsData(session=self.session)
-        self.users_biz = UsersBusiness(session=self.session)
+        self.biz = BusinessWorker(session=self.session)
         self.user = self.users_data.create(
             login='wart',
             mail='a@b.c')
@@ -32,8 +32,8 @@ class TestGetAvailableApp(TestData):
             permission=('warfinance', 'view'))
 
     def test_get_apps(self):
-        apps = self.users_biz.get_applications(user_id=self.user.id)
-        self.assertTrue('warfinance' in apps)
+        user = self.biz.get.user(user_id=self.user.id)
+        self.assertTrue('warfinance' in user.applications)
 
 
 if __name__ == '__main__':
