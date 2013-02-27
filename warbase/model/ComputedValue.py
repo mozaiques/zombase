@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Float, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import UniqueConstraint, Index
 
@@ -13,7 +13,7 @@ class ComputedValue(Base):
     target_id = Column(Integer)
 
     expired = Column(Boolean)
-    value = Column(Integer)
+    value = Column(Float)
 
     datetime = Column(DateTime, index=True)
 
