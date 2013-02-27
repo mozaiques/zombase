@@ -20,8 +20,8 @@ class ComputedValuesData(DataRepository):
         if 'value' not in kwargs:
             raise TypeError('Value not provided')
         
-        if not isinstance(kwargs['value'], int):
-            raise AttributeError('value provided is not an integer')
+        if not isinstance(kwargs['value'], float):
+            raise AttributeError('value provided is not a float')
 
         try:
             computed_value = self._get_computed_value(**kwargs)

@@ -28,7 +28,7 @@ class TestSetComputedValues(TestComputedValues):
         compval = self.compval_data.set(
             key='foo:bar',
             target_id=12,
-            value=14)
+            value=float(14))
         self.assertEqual(compval.key, 'foo:bar')
 
     def test_set_compval_no_value(self):
@@ -50,7 +50,7 @@ class TestExpireComputedValues(TestComputedValues):
         compval = self.compval_data.set(
             key='foo:bar',
             target_id=12,
-            value=14)
+            value=float(14))
         daBool = self.compval_data.expire(
             key='foo:bar',
             target_id=12)
@@ -61,11 +61,11 @@ class TestExpireComputedValues(TestComputedValues):
         compval1 = self.compval_data.set(
             key='foo:bar',
             target_id=12,
-            value=14)
+            value=float(14))
         compval2 = self.compval_data.set(
             key='foo:foo',
             target_id=12,
-            value=16)
+            value=float(16))
         daBool = self.compval_data.expire(
             key='foo:',
             target_id=12)
