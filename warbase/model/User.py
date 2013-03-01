@@ -18,16 +18,16 @@ class User(warbase.model.Base):
     firstname = Column(Unicode(length=30))
     lastname = Column(Unicode(length=30))
 
-    def is_authenticated():
+    def is_authenticated(self):
         return True
 
-    def is_active():
+    def is_active(self):
         return True
 
-    def is_anonymous():
+    def is_anonymous(self):
         return False
 
-    def get_id():
+    def get_id(self):
         return unicode(self.id)
 
 
