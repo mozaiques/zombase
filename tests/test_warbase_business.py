@@ -1,10 +1,6 @@
  # -*- coding: utf-8 -*-
 import unittest
 
-from voluptuous import MultipleInvalid
-
-import warbase.model
-from warbase.model import *
 from warbase.data.users import UsersData
 from warbase.biz import BusinessWorker
 

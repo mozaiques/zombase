@@ -2,12 +2,9 @@
 import unittest
 import hashlib
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from voluptuous import MultipleInvalid
 
-import warbase.model
-from warbase.model import *
+from warbase.model import User
 from warbase.data.users import UsersData
 
 from . import TestData

@@ -1,7 +1,3 @@
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session as SQLA_Session
-
-from warbase.model import User
 from warbase.data import DataRepository
 
 

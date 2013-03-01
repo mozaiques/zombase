@@ -1,7 +1,5 @@
  # -*- coding: utf-8 -*-
 import unittest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 import warbase.data
 
