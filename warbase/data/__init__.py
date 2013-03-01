@@ -16,8 +16,9 @@ class DataRepository():
         if not 'session' in kwargs:
             raise TypeError('session not provided')
 
-        if not isinstance(kwargs['session'], SQLA_Session):
-            raise AttributeError('session provided is not a SQLA-Session')
+        # Scoped session does not inherit from Session ... Not possible yet.
+        # if not isinstance(kwargs['session'], SQLA_Session):
+        #     raise AttributeError('session provided is not a SQLA-Session')
 
         self.session = kwargs['session']
 
