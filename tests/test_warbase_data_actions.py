@@ -26,24 +26,19 @@ class TestCreateAction(TestData):
     def setUp(self):
         TestData.setUp(self)
         self.actions_data = ActionsData(session=self.session,
-                                        user=User.User(),
-                                        application=Application.Application())
+                                        user=User.User())
 
     def tearDown(self):
         TestData.tearDown(self)
         del self.actions_data
 
     def test_correct_create(self):
-        action = self.actions_data.create(
-            application=Application.Application(),
-            message=u'Test message')
+        action = self.actions_data.create(message=u'Test message')
         self.assertTrue(True)
 
     def test_wrong_message(self):
         with self.assertRaises(MultipleInvalid):
-            action = self.actions_data.create(
-                application=Application.Application(),
-                message='Test message')
+            action = self.actions_data.create(message='Test message')
 
 
 if __name__ == '__main__':

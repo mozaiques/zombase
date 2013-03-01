@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session as SQLA_Session
 from sqlalchemy.orm.exc import NoResultFound
 
-from warbase.model import User, Application, ComputedValue
+from warbase.model import User, ComputedValue
 
 
 class DataRepository():
@@ -38,33 +38,10 @@ class DataRepository():
         else:
             raise TypeError('User informations (user or user_id) not provided')
 
-    def _get_application(self, **kwargs):
-        """Return an application given an application (other SQLA-Session) or
-        an application_id."""
-        if 'application' in kwargs:
-            if not isinstance(kwargs['application'], Application.Application):
-                raise AttributeError(
-                    'application provided is not a wb-Application')
-
-            # Merging application which may come from another session
-            return self.session.merge(kwargs['application'])
-
-        elif 'application_id' in kwargs:
-            try:
-                app_id = kwargs['application_id']
-                return self.session.query(Application.Application)\
-                    .filter(Application.Application.id == app_id)\
-                    .one()
-            except NoResultFound:
-                raise AttributeError('application_id provided doesn\'t exist')
-
-        else:
-            raise TypeError('Application informations not provided')
-
     def _get_computed_value(self, **kwargs):
         """Return an computed value given a key and a target_id"""
         if 'key' not in kwargs or 'target_id' not in kwargs:
-            raise TypeError('Application informations not provided')
+            raise TypeError('Value informations not provided')
         
         if not isinstance(kwargs['key'], str):
             raise AttributeError('key provided is not a string')
@@ -80,7 +57,7 @@ class DataRepository():
     def _get_computed_values(self, **kwargs):
         """Return a list computed value given a key prefix and a target_id"""
         if 'key' not in kwargs or 'target_id' not in kwargs:
-            raise TypeError('Application informations not provided')
+            raise TypeError('Value informations not provided')
         
         if not isinstance(kwargs['key'], str):
             raise AttributeError('key provided is not a string')

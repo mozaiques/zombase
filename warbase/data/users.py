@@ -7,7 +7,7 @@ class UsersData(DataRepository):
     """DataRepository object for users."""
 
     def create(self, **kwargs):
-        """Create and insert an application in DB.
+        """Create and insert a user in DB.
 
         Keyword arguments:
         see warbmodel.User.UserSchema

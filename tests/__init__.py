@@ -8,7 +8,6 @@ from voluptuous import MultipleInvalid
 import warbase.model
 from warbase.model import *
 from warbase.data.users import UsersData
-from warbase.data.applications import ApplicationsData
 
 
 class TestData(unittest.TestCase):

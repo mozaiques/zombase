@@ -8,7 +8,6 @@ from sqlalchemy.orm import sessionmaker
 import warbase.model
 from warbase.model import *
 from warbase.data.users import UsersData
-from warbase.data.applications import ApplicationsData
 from warbase.biz.users import UsersBusiness
 
 

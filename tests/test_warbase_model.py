@@ -1,16 +1,12 @@
  # -*- coding: utf-8 -*-
 import unittest
 
-from warbase.model import Application, User, Action, ComputedValue
+from warbase.model import User, Action, ComputedValue
 
 from . import TestData
 
 
 class TestModelBase(TestData):
-
-    def test_application(self):
-        application = Application.Application()
-        self.assertTrue(True)
 
     def test_user(self):
         user = User.User()
