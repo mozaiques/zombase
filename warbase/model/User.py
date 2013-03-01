@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, Unicode, PickleType
 from voluptuous import Schema, Required, All, Length
 
-from . import Base
+import warbase.model
 
 
-class User(Base):
+class User(warbase.model.Base):
     __tablename__ = 'wb_users'
     id = Column(Integer, primary_key=True)
 

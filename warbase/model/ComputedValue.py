@@ -2,10 +2,10 @@ from sqlalchemy import Column, Float, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import UniqueConstraint, Index
 
-from . import Base
+import warbase.model
 
 
-class ComputedValue(Base):
+class ComputedValue(warbase.model.Base):
     __tablename__ = 'wb_computed_values'
     id = Column(Integer, primary_key=True)
 

@@ -4,10 +4,11 @@ from sqlalchemy import Column, Integer, DateTime, UnicodeText, ForeignKey
 from sqlalchemy.orm import backref, relationship
 from voluptuous import Schema, Required
 
-from . import Base, User
+import warbase.model
+import User
 
 
-class Action(Base):
+class Action(warbase.model.Base):
     __tablename__ = 'wb_actions'
     id = Column(Integer, primary_key=True)
 
