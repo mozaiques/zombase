@@ -40,7 +40,7 @@ class DataRepository():
         """Return an computed value given a key and a target_id"""
         if 'key' not in kwargs or 'target_id' not in kwargs:
             raise TypeError('Value informations not provided')
-        
+
         if not isinstance(kwargs['key'], str):
             raise AttributeError('key provided is not a string')
 
@@ -56,7 +56,7 @@ class DataRepository():
         """Return a list computed value given a key prefix and a target_id"""
         if 'key' not in kwargs or 'target_id' not in kwargs:
             raise TypeError('Value informations not provided')
-        
+
         if not isinstance(kwargs['key'], str):
             raise AttributeError('key provided is not a string')
 
@@ -75,5 +75,5 @@ class DataRepository():
             .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
             .one()
             computed_values = [computed_value]
-        
+
         return computed_values

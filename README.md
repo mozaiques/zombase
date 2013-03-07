@@ -6,11 +6,11 @@ Introduction
 
 ### Contexte
 
-Ce package python sert de base à certaines applications WArtisans.
+Ce package python sert de base à certaines applications wartisans.
 
 ### Objectif
 
-Ce package permet de gérer les utilisateurs et les applications d'un client.
+Ce package permet de gérer des utilisateurs, des actions et des valeurs
 
 ### Dépendances
 
@@ -32,7 +32,7 @@ de vérifier la cohérence des données qui intégreront la base de données.
 Est le seul package à avoir le droit (par convention) d'écrire (INSERT/UPDATE)
 dans la base.
 
-### warbase.biz
+### warbase.business
 
 Package faisant office de couche business. C'est la seule API censée être
 utilisée.
