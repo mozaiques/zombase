@@ -37,7 +37,6 @@ class ActionsData(DataRepository):
         action = Action.Action(**kwargs)
         self.session.add(action)
 
-        # To get a full action to return (get a working id)
         self.session.commit()
 
         return action

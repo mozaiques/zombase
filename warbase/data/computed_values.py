@@ -44,6 +44,7 @@ class ComputedValuesData(DataRepository):
                 value=computed_value)
 
         self.session.commit()
+
         return computed_value
 
     def expire(self, **kwargs):
@@ -66,4 +67,5 @@ class ComputedValuesData(DataRepository):
                 self._del_from_cache(kwargs['key'], kwargs['target_id'])
 
         self.session.commit()
+
         return True

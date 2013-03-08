@@ -19,7 +19,6 @@ class UsersData(DataRepository):
         user = User.User(**kwargs)
         self.session.add(user)
 
-        # To get a full user to return (get a working id)
         self.session.commit()
 
         return user
@@ -47,4 +46,5 @@ class UsersData(DataRepository):
             user.permissions.append(kwargs['permission'])
 
         self.session.commit()
+
         return user
