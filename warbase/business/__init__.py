@@ -7,4 +7,5 @@ class AbcBusinessWorker(DataRepository):
     Provide a base with a fully functionnal SQLA-Session.
 
     """
+
     pass

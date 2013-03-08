@@ -6,18 +6,20 @@ class DataRepository():
 
     Provide a base with a fully functionnal SQLA-Session.
 
+    Handle cache interaction.
+
     """
 
     def __init__(self, **kwargs):
-        """Init a SQLA-Session."""
         if not 'session' in kwargs:
             raise TypeError('session not provided')
 
-        # Scoped session does not inherit from Session ... Not possible yet.
-        # if not isinstance(kwargs['session'], SQLA_Session):
-        #     raise AttributeError('session provided is not a SQLA-Session')
-
         self.session = kwargs['session']
+
+        if 'cache' in kwargs:
+            self.cache = kwargs['cache']
+        else:
+            self.cache = False
 
     def _get_user(self, **kwargs):
         """Return a user given a user (other SQLA-Session) or a user_id."""
@@ -36,8 +38,50 @@ class DataRepository():
         else:
             raise TypeError('User informations (user or user_id) not provided')
 
-    def _get_computed_value(self, **kwargs):
-        """Return an computed value given a key and a target_id"""
+    def _cache_key(self, **kwargs):
+        """Return a cache key."""
+        return ':'.join([kwargs['key'], str(kwargs['target_id'])])
+
+    def _get_from_cache(self, **kwargs):
+        """Get a value from the cache.
+
+        Keyword arguments:
+        key -- key of the value
+        target_id -- id of the target
+
+        """
+        return self.cache.get(self._cache_key(**kwargs))
+
+    def _set_in_cache(self, **kwargs):
+        """Set a value in the cache.
+
+        Keyword arguments:
+        key -- key of the value
+        target_id -- id of the target
+        value -- value to set
+
+        """
+        self.cache.set(self._cache_key(**kwargs), kwargs['value'])
+
+    def _del_from_cache(self, **kwargs):
+        """Delete a value from the cache.
+
+        Keyword arguments:
+        key -- key of the value
+        target_id -- id of the target
+
+        """
+        self.cache.delete(self._cache_key(**kwargs))
+
+    def _get_computed_value(self, force_db=False, **kwargs):
+        """Return an computed value given a key and a target_id. Work with
+        cache
+
+        Keyword arguments:
+        key -- key of the value
+        target_id -- id of the target
+
+        """
         if 'key' not in kwargs or 'target_id' not in kwargs:
             raise TypeError('Value informations not provided')
 
@@ -47,13 +91,33 @@ class DataRepository():
         if not isinstance(kwargs['target_id'], int):
             raise AttributeError('target_id provided is not an integer')
 
-        return self.session.query(ComputedValue.ComputedValue)\
+        # Try to get the value in the cache
+        if self.cache and not force_db:
+            value = self._get_from_cache(
+                key=kwargs['key'],
+                target_id=kwargs['target_id'])
+            if value:
+                return value
+
+        value = self.session.query(ComputedValue.ComputedValue)\
             .filter(ComputedValue.ComputedValue.key == kwargs['key'])\
             .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
             .one()
 
+        # Add the value to the cache
+        if self.cache:
+            self._set_in_cache(
+                key=kwargs['key'],
+                target_id=kwargs['target_id'],
+                value=value)
+
+        return value
+
     def _get_computed_values(self, **kwargs):
-        """Return a list computed value given a key prefix and a target_id"""
+        """Return a list computed value given a key prefix and a target_id. Do
+        not work with cache
+
+        """
         if 'key' not in kwargs or 'target_id' not in kwargs:
             raise TypeError('Value informations not provided')
 

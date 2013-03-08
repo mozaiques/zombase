@@ -19,11 +19,12 @@ class ComputedValuesData(DataRepository):
         """
         if 'value' not in kwargs:
             raise TypeError('Value not provided')
-        
+
         if not isinstance(kwargs['value'], float):
             raise AttributeError('value provided is not a float')
 
         try:
+            kwargs['force_db'] = True
             computed_value = self._get_computed_value(**kwargs)
         except NoResultFound:
             computed_value = ComputedValue.ComputedValue(
@@ -36,6 +37,13 @@ class ComputedValuesData(DataRepository):
 
         self.session.add(computed_value)
 
+        if self.cache:
+            self._set_in_cache(
+                key=kwargs['key'],
+                target_id=kwargs['target_id'],
+                value=computed_value)
+
+        self.session.commit()
         return computed_value
 
     def expire(self, **kwargs):
@@ -54,6 +62,8 @@ class ComputedValuesData(DataRepository):
         for computed_value in computed_values:
             computed_value.expired = True
             self.session.add(computed_value)
+            if self.cache:
+                self._del_from_cache(kwargs['key'], kwargs['target_id'])
 
-        self.session.flush()
+        self.session.commit()
         return True

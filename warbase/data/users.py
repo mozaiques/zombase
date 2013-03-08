@@ -20,7 +20,7 @@ class UsersData(DataRepository):
         self.session.add(user)
 
         # To get a full user to return (get a working id)
-        self.session.flush()
+        self.session.commit()
 
         return user
 
@@ -46,5 +46,5 @@ class UsersData(DataRepository):
         if kwargs['permission'] not in user.permissions:
             user.permissions.append(kwargs['permission'])
 
-        self.session.flush()
+        self.session.commit()
         return user

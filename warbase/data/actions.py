@@ -38,6 +38,6 @@ class ActionsData(DataRepository):
         self.session.add(action)
 
         # To get a full action to return (get a working id)
-        self.session.flush()
+        self.session.commit()
 
         return action
