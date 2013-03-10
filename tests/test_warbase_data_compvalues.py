@@ -46,7 +46,6 @@ class TestExpireComputedValues(TestComputedValues):
         daBool = self.compval_data.expire(
             key='foo:bar',
             target_id=12)
-        self.assertTrue(daBool)
         self.assertTrue(compval.expired)
 
     def test_expire_set_compval(self):
@@ -61,7 +60,6 @@ class TestExpireComputedValues(TestComputedValues):
         daBool = self.compval_data.expire(
             key='foo:',
             target_id=12)
-        self.assertTrue(daBool)
         self.assertTrue(compval1.expired)
         self.assertTrue(compval2.expired)
 

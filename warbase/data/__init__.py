@@ -138,13 +138,11 @@ class DataRepository():
             computed_values = self.session.query(ComputedValue.ComputedValue)\
                 .filter(ComputedValue.ComputedValue.key.like(kwargs['key']+'%'))\
                 .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
+                .filter(ComputedValue.ComputedValue.expired == False)\
                 .all()
 
         else:
-            computed_value = self.session.query(ComputedValue.ComputedValue)\
-            .filter(ComputedValue.ComputedValue.key == kwargs['key'])\
-            .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
-            .one()
+            computed_value = self._get_computed_value(force_db=True, **kwargs)
             computed_values = [computed_value]
 
         return computed_values

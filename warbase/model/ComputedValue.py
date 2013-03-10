@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from sqlalchemy import Column, Float, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import UniqueConstraint, Index
@@ -20,3 +22,6 @@ class ComputedValue(warbase.model.Base):
     __table_args__ = (
         UniqueConstraint('key', 'target_id'),
         Index('idx_computed_values', 'key', 'target_id'))
+
+
+CacheComputedValue = namedtuple('CacheComputedValue', ['value', 'key', 'target_id'])

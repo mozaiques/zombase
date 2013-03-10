@@ -37,13 +37,17 @@ class ComputedValuesData(DataRepository):
 
         self.session.add(computed_value)
 
+        self.session.commit()
+
         if self.cache:
+            value = ComputedValue.CacheComputedValue(
+                value=computed_value.value,
+                key=kwargs['key'],
+                target_id=kwargs['target_id'])
             self._set_in_cache(
                 key=kwargs['key'],
                 target_id=kwargs['target_id'],
-                value=computed_value)
-
-        self.session.commit()
+                value=value)
 
         return computed_value
 
@@ -58,16 +62,14 @@ class ComputedValuesData(DataRepository):
         try:
             computed_values = self._get_computed_values(**kwargs)
         except NoResultFound:
-            return False
+            return
 
         for computed_value in computed_values:
             computed_value.expired = True
             self.session.add(computed_value)
             if self.cache:
                 self._del_from_cache(
-                    key=kwargs['key'],
+                    key=computed_value.key,
                     target_id=kwargs['target_id'])
 
         self.session.commit()
-
-        return True
