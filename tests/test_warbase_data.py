@@ -14,6 +14,7 @@ class DataRepository(TestData):
     def setUp(self):
         TestData.setUp(self)
         self.cache = MemcachedCache(['127.0.0.1:11211'])
+        self.cache.clear()
 
     def tearDown(self):
         TestData.tearDown(self)

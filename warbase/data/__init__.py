@@ -1,3 +1,5 @@
+from sqlalchemy.orm.exc import NoResultFound
+
 from warbase.model import User, ComputedValue
 
 
@@ -103,6 +105,9 @@ class DataRepository():
             .filter(ComputedValue.ComputedValue.key == kwargs['key'])\
             .filter(ComputedValue.ComputedValue.target_id == kwargs['target_id'])\
             .one()
+
+        if value.expired:
+            raise NoResultFound
 
         # Add the value to the cache
         if self.cache:
