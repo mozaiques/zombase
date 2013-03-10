@@ -107,6 +107,8 @@ class DataRepository():
             .one()
 
         if value.expired:
+            if force_db:
+                return value
             raise NoResultFound
 
         # Add the value to the cache
