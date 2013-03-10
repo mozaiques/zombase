@@ -64,7 +64,9 @@ class ComputedValuesData(DataRepository):
             computed_value.expired = True
             self.session.add(computed_value)
             if self.cache:
-                self._del_from_cache(kwargs['key'], kwargs['target_id'])
+                self._del_from_cache(
+                    key=kwargs['key'],
+                    target_id=kwargs['target_id'])
 
         self.session.commit()
 
