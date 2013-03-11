@@ -73,3 +73,25 @@ class ComputedValuesData(DataRepository):
                     target_id=kwargs['target_id'])
 
         self.session.commit()
+
+    def expire_key(self, **kwargs):
+        """Expire all computed value with corresponding key from DB.
+
+        Keyword arguments:
+        key -- string referencing the values (*)
+
+        """
+        try:
+            computed_values = self._get_computed_values_key(**kwargs)
+        except NoResultFound:
+            return
+
+        for computed_value in computed_values:
+            computed_value.expired = True
+            self.session.add(computed_value)
+            if self.cache:
+                self._del_from_cache(
+                    key=computed_value.key,
+                    target_id=computed_value.target_id)
+
+        self.session.commit()

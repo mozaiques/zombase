@@ -146,3 +146,21 @@ class DataRepository():
             computed_values = [computed_value]
 
         return computed_values
+
+    def _get_computed_values_key(self, **kwargs):
+        """Return a list computed value given a key prefix and a target_id. Do
+        not work with cache
+
+        """
+        if 'key' not in kwargs:
+            raise TypeError('Value informations not provided')
+
+        if not isinstance(kwargs['key'], str):
+            raise AttributeError('key provided is not a string')
+
+        computed_values = self.session.query(ComputedValue.ComputedValue)\
+            .filter(ComputedValue.ComputedValue.key.like(kwargs['key']+'%'))\
+            .filter(ComputedValue.ComputedValue.expired == False)\
+            .all()
+
+        return computed_values
