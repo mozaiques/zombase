@@ -1,0 +1,10 @@
+SQLAlchemy==0.8.0
+voluptuous==0.7.0
+
+# To test cache
+Werkzeug==0.8.3
+python-memcached==1.48
+
+# To test
+coverage==3.6
+nose==1.2.1
