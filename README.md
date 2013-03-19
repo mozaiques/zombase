@@ -15,7 +15,7 @@ Ce package permet de gérer des utilisateurs, des actions et des valeurs
 ### Dépendances
 
 * [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.8)
-* [Voluptuous](https://github.com/alecthomas/voluptuous) (0.6)
+* [Voluptuous](https://github.com/alecthomas/voluptuous) (0.7)
 
 Architecture
 ------------
