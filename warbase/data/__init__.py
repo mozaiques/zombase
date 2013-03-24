@@ -82,6 +82,7 @@ class DataRepository():
         Keyword arguments:
         key -- key of the value
         target_id -- id of the target
+        force_db -- wether to force a check in DB or not
 
         """
         if 'key' not in kwargs or 'target_id' not in kwargs:
@@ -121,8 +122,8 @@ class DataRepository():
         return value
 
     def _get_computed_values(self, **kwargs):
-        """Return a list computed value given a key prefix and a target_id. Do
-        not work with cache
+        """Return a list of computed value given a key prefix and a target_id.
+        Do not work with cache
 
         """
         if 'key' not in kwargs or 'target_id' not in kwargs:
@@ -148,8 +149,8 @@ class DataRepository():
         return computed_values
 
     def _get_computed_values_key(self, **kwargs):
-        """Return a list computed value given a key prefix and a target_id. Do
-        not work with cache
+        """Return a list computed value given a key prefix. Do not work with
+        cache.
 
         """
         if 'key' not in kwargs:
