@@ -2,6 +2,7 @@
 import unittest
 
 from werkzeug.contrib.cache import MemcachedCache
+from sqlalchemy.orm.exc import NoResultFound
 
 import warbase.data
 from warbase.model import ComputedValue
@@ -64,6 +65,16 @@ class DataRepository(TestData):
         cache_cv = cv_repo._get_from_cache(key='bla:vi', target_id=12)
 
         self.assertEqual(cache_cv.value, cv.value)
+
+    def test_remove_key_from_cache(self):
+        cv_repo = warbase.data.computed_values.ComputedValuesData(
+            session=self.session,
+            cache=self.cache)
+        cv_repo.set(key='bla:vi', target_id=12, value=float(30))
+        cv_repo.expire_key(key='bla:vi')
+
+        with self.assertRaises(NoResultFound):
+            cv_repo._get_computed_value(key='bla:vi', target_id=12)
 
 
 if __name__ == '__main__':
