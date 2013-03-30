@@ -30,13 +30,13 @@ class DataRepository(TestData):
             data_repo = warbase.data.DataRepository(cache=self.cache)
 
     def test_instancing_data_repo_with_cache(self):
-        data_repo = warbase.data.DataRepository(
+        data_repo = warbase.data.computed_values.ComputedValuesData(
             session=self.session,
             cache=self.cache)
         self.assertEqual(self.cache, data_repo.cache)
 
     def test_generation_cache_key(self):
-        data_repo = warbase.data.DataRepository(
+        data_repo = warbase.data.computed_values.ComputedValuesData(
             session=self.session,
             cache=self.cache)
         self.assertEqual('bla:vi:12', data_repo._cache_key(key='bla:vi', target_id=12))
@@ -55,7 +55,7 @@ class DataRepository(TestData):
         cv = cv_repo.set(key='bla:vi', target_id=12, value=float(30))
 
         del cv_repo
-        cv_repo = warbase.data.DataRepository(
+        cv_repo = warbase.data.computed_values.ComputedValuesData(
             session=self.session,
             cache=self.cache)
 
