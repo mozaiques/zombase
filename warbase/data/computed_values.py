@@ -10,7 +10,7 @@ class ComputedValuesData():
 
         for cache in self.cache_systems:
             val = cache.get(**kwargs)
-            if val:
+            if val is not None:
                 return val
 
         return None
