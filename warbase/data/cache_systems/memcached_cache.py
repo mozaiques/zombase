@@ -66,5 +66,8 @@ class MemcachedCache():
             return
 
         cache_key = self._cache.get(split_key[0])
+        if cache_key is None:
+            return
+
         cache_key.pop(split_key[1], None)
         self._cache.set(split_key[0], cache_key)
