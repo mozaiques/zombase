@@ -29,12 +29,12 @@ class MemcachedCache():
 
         split_key = self._split_key(kwargs['key'])
         if not split_key or not split_key[1]:
-            return False
+            raise AttributeError('Incorrect key')
 
         cache_key = self._cache.get(split_key[0])
 
         if not cache_key or not split_key[1] in cache_key:
-            return False
+            return None
 
         return cache_key[split_key[1]]
 

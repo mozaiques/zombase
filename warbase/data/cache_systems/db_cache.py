@@ -26,10 +26,10 @@ class DbCache():
                 .filter(ComputedValue.key == kwargs['key'])\
                 .one()
         except NoResultFound:
-            return False
+            return None
 
         if value.expired and not force:
-            return False
+            return None
 
         return value.value
 

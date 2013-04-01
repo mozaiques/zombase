@@ -13,7 +13,7 @@ class ComputedValuesData():
             if val:
                 return val
 
-        return False
+        return None
 
     def set(self, **kwargs):
 
