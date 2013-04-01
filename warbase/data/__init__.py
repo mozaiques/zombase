@@ -16,11 +16,6 @@ class DataRepository():
 
         self.session = kwargs['session']
 
-        if 'cache' in kwargs:
-            self.cache = kwargs['cache']
-        else:
-            self.cache = False
-
     def _get_user(self, **kwargs):
         """Return a user given a user (other SQLA-Session) or a user_id."""
         if 'user' in kwargs:

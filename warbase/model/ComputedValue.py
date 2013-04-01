@@ -1,7 +1,4 @@
-from collections import namedtuple
-
-from sqlalchemy import Column, Float, Integer, String, DateTime, Boolean
-from sqlalchemy.orm import backref, relationship
+from sqlalchemy import Column, PickleType, Integer, String, Boolean
 from sqlalchemy.schema import UniqueConstraint, Index
 
 import warbase.model
@@ -12,16 +9,10 @@ class ComputedValue(warbase.model.Base):
     id = Column(Integer, primary_key=True)
 
     key = Column(String)
-    target_id = Column(Integer)
 
     expired = Column(Boolean)
-    value = Column(Float)
-
-    datetime = Column(DateTime, index=True)
+    value = Column(PickleType)
 
     __table_args__ = (
-        UniqueConstraint('key', 'target_id'),
-        Index('idx_computed_values', 'key', 'target_id'))
-
-
-CacheComputedValue = namedtuple('CacheComputedValue', ['value', 'key', 'target_id'])
+        UniqueConstraint('key'),
+        Index('idx_computed_values', 'key'))
