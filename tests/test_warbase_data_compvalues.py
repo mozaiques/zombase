@@ -20,6 +20,16 @@ class CacheBusinessTestSuite():
         val = self.cvalues_data.get(key='foo:1:bar')
         self.assertEqual(val, float(14))
 
+    def test_reset_and_get_compval(self):
+        self.cvalues_data.set(
+            key='foo:1:bar',
+            value=float(14))
+        self.cvalues_data.set(
+            key='foo:1:bar',
+            value=float(19))
+        val = self.cvalues_data.get(key='foo:1:bar')
+        self.assertEqual(val, float(19))
+
     def test_set_compval_no_value(self):
         with self.assertRaises(TypeError):
             self.cvalues_data.set(key='foo:1:bar')

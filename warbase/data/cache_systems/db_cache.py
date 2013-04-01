@@ -39,9 +39,11 @@ class DbCache():
         if 'value' not in kwargs:
             raise TypeError('Value informations not provided')
 
-        value = self.get(**kwargs)
-
-        if not value:
+        try:
+            value = self.session.query(ComputedValue)\
+                .filter(ComputedValue.key == kwargs['key'])\
+                .one()
+        except NoResultFound:
             value = ComputedValue()
             value.key = kwargs['key']
 
