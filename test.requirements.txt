@@ -3,7 +3,7 @@ voluptuous==0.7.0
 
 # To test cache
 Werkzeug==0.8.3
-python-memcached==1.48
+pylibmc==1.2.3
 
 # To test
 coverage==3.6
