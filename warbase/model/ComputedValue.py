@@ -1,4 +1,5 @@
-from sqlalchemy import Column, PickleType, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean
+from warbase.utils.sqla import JSONType
 from sqlalchemy.schema import UniqueConstraint, Index
 
 import warbase.model
@@ -11,7 +12,7 @@ class ComputedValue(warbase.model.Base):
     key = Column(String)
 
     expired = Column(Boolean)
-    value = Column(PickleType)
+    value = Column(JSONType())
 
     __table_args__ = (
         UniqueConstraint('key'),
