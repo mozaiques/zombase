@@ -19,6 +19,8 @@ class User(warbase.model.Base):
     firstname = Column(Unicode(length=30))
     lastname = Column(Unicode(length=30))
 
+    # These are needed for Flask interface ... does not really make sense in
+    # warbase as we try to be framework agnostic.
     def is_authenticated(self):
         return True
 

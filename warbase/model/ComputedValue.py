@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sqlalchemy import Column, Integer, String, Boolean
 from warbase.utils.sqla import JSONType
 from sqlalchemy.schema import UniqueConstraint, Index

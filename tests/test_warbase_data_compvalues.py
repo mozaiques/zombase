@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import unittest
 
 import pylibmc
@@ -78,8 +78,8 @@ class TestComputedValuesMemcachedCache(unittest.TestCase, CacheBusinessTestSuite
             raise SkipTest
 
     def test_split_key(self):
-        split_key = self.memcached_cache._split_key(key='foo:bar')
-        self.assertTrue(not split_key)
+        with self.assertRaises(AttributeError):
+            _key, _property_name = self.memcached_cache._check_key(key='foo:bar')
 
 
 if __name__ == '__main__':

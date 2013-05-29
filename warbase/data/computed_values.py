@@ -1,26 +1,30 @@
-class ComputedValuesData():
+# -*- coding: utf-8 -*-
 
-    def __init__(self, **kwargs):
+
+class ComputedValuesData():
+    """Unified interface for cache systems."""
+
+    def __init__(self):
         self.cache_systems = []
 
     def append_cache(self, cache):
+        """Append a cache system to the interface."""
         self.cache_systems.append(cache)
 
-    def get(self, **kwargs):
-
+    def get(self, key):
+        """Return the first value found by browsing the cache systems."""
         for cache in self.cache_systems:
-            val = cache.get(**kwargs)
+            val = cache.get(key)
             if val is not None:
                 return val
-
         return None
 
-    def set(self, **kwargs):
-
+    def set(self, key, value):
+        """Set the value in all the cache systems."""
         for cache in self.cache_systems:
-            cache.set(**kwargs)
+            cache.set(key, value)
 
-    def expire(self, **kwargs):
-
+    def expire(self, key):
+        """Expire the value in all the cache systems."""
         for cache in self.cache_systems:
-            cache.expire(**kwargs)
+            cache.expire(key)

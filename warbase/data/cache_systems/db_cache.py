@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sqlalchemy.orm.exc import NoResultFound
 
 from warbase.model.ComputedValue import ComputedValue
@@ -5,68 +6,59 @@ from warbase.model.ComputedValue import ComputedValue
 
 class DbCache():
 
-    def __init__(self, **kwargs):
-        if not 'session' in kwargs:
-            raise TypeError('session not provided')
+    def __init__(self, session):
+        self.session = session
 
-        self.session = kwargs['session']
-
-    def _check_key(self, **kwargs):
-        if 'key' not in kwargs:
-            raise TypeError('key informations not provided')
-
-        if not isinstance(kwargs['key'], str):
+    def _check_key(self, key):
+        if not isinstance(key, str):
             raise AttributeError('key provided is not a string')
 
-    def get(self, force=False, **kwargs):
-        self._check_key(**kwargs)
+    def get(self, key):
+        self._check_key(key)
 
         try:
             value = self.session.query(ComputedValue)\
-                .filter(ComputedValue.key == kwargs['key'])\
+                .filter(ComputedValue.key == key)\
                 .one()
         except NoResultFound:
             return None
 
-        if value.expired and not force:
+        if value.expired:
             return None
 
         return value.value
 
-    def set(self, **kwargs):
-        self._check_key(**kwargs)
-
-        if 'value' not in kwargs:
-            raise TypeError('Value informations not provided')
+    def set(self, key, value):
+        self._check_key(key)
 
         try:
-            value = self.session.query(ComputedValue)\
-                .filter(ComputedValue.key == kwargs['key'])\
+            value_db = self.session.query(ComputedValue)\
+                .filter(ComputedValue.key == key)\
                 .one()
         except NoResultFound:
-            value = ComputedValue()
-            value.key = kwargs['key']
+            value_db = ComputedValue()
+            value_db.key = key
 
-        value.expired = False
-        value.value = kwargs['value']
+        value_db.expired = False
+        value_db.value = value
 
-        self.session.add(value)
+        self.session.add(value_db)
         self.session.commit()
 
-    def expire(self, **kwargs):
-        self._check_key(**kwargs)
+    def expire(self, key):
+        self._check_key(key)
 
-        if kwargs['key'][-1] == ':':
-            values = self.session.query(ComputedValue)\
-                .filter(ComputedValue.key.like(kwargs['key']+'%'))\
+        if key[-1] == ':':
+            values_db = self.session.query(ComputedValue)\
+                .filter(ComputedValue.key.like(key+'%'))\
                 .all()
         else:
-            value = self.session.query(ComputedValue)\
-                .filter(ComputedValue.key == kwargs['key'])\
+            value_db = self.session.query(ComputedValue)\
+                .filter(ComputedValue.key == key)\
                 .one()
-            values = [value]
+            values_db = [value_db]
 
-        for a_val in values:
+        for a_val in values_db:
             a_val.expired = True
             self.session.add(a_val)
 

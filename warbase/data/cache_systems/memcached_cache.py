@@ -1,73 +1,94 @@
+# -*- coding: utf-8 -*-
 import pylibmc
 
 
 class MemcachedCache():
+    """Cache system using memcached.
 
-    def __init__(self, **kwargs):
-        if not 'server' in kwargs:
-            raise TypeError('server not provided')
+    This cache system is designed to only accept keys in the
+    'object_type:object_id:object_property' form (called full-form). In certain
+    cases, keys in the 'object_type:object_id:' form (reduced-form) can be
+    accepted.
 
-        self._server = kwargs['server']
-        self._cache = pylibmc.Client([self._server])
+    Internaly we store values with the key 'object_type:object_id', and then
+    in a dict.
 
-    def _check_key(self, **kwargs):
-        if 'key' not in kwargs:
-            raise TypeError('Key informations not provided')
+    """
 
-        if not isinstance(kwargs['key'], str):
+    def __init__(self, server):
+        """Initialize the cache system with the given server. Expect a full
+        server adress, including port. Eg: '127.0.0.1:11211'.
+
+        """
+        self._server = server
+        self._cache = pylibmc.Client([server])
+
+    def _check_key(self, key):
+        """Check if the given key is valid, raise AttributeError if not."""
+        if not isinstance(key, str):
             raise AttributeError('key provided is not a string')
 
-    def _split_key(self, key):
-        split_key = key.split(':')
-        if len(split_key) != 3:
-            return False
-
-        return ['{}:{}'.format(split_key[0], split_key[1])] + split_key[2:]
-
-    def get(self, force=False, **kwargs):
-        self._check_key(**kwargs)
-
-        split_key = self._split_key(kwargs['key'])
-        if not split_key or not split_key[1]:
+        if len(key.split(':')) != 3:
             raise AttributeError('Incorrect key')
 
-        cache_key = self._cache.get(split_key[0])
+    def _split_key(self, key):
+        """Split the given key in order to get the 'internal' key and the
+        'internal' property name, and return these two values.
 
-        if not cache_key or not split_key[1] in cache_key:
+        """
+        split_key = key.split(':')
+        return ('{}:{}'.format(split_key[0], split_key[1]), split_key[2])
+
+    def get(self, key):
+        """Return the value corresponding to the given key, or `None`."""
+        self._check_key(key)
+        _key, _property_name = self._split_key(key)
+
+        # `cache_value` is None (if there is no corresponding value in memcached)
+        # or is a dict.
+        cache_value = self._cache.get(_key)
+
+        if not cache_value or not _property_name in cache_value:
             return None
 
-        return cache_key[split_key[1]]
+        return cache_value[_property_name]
 
-    def set(self, **kwargs):
-        self._check_key(**kwargs)
+    def set(self, key, value):
+        """Set the association key/value."""
+        self._check_key(key)
+        _key, _property_name = self._split_key(key)
 
-        if 'value' not in kwargs:
-            raise TypeError('Value informations not provided')
+        cache_value = self._cache.get(_key)
 
-        split_key = self._split_key(kwargs['key'])
-        if not split_key or not split_key[1]:
-            raise AttributeError('Incorrect key')
+        # `cache_value` hasn't been initialized yet, so we create a dict.
+        if not cache_value:
+            cache_value = {}
 
-        cache_key = self._cache.get(split_key[0])
-        if not cache_key:
-            cache_key = {}
+        # Set the value
+        cache_value[_property_name] = value
 
-        cache_key[split_key[1]] = kwargs['value']
+        # Store in cache
+        self._cache.set(_key, cache_value)
 
-        self._cache.set(split_key[0], cache_key)
+    def expire(self, key):
+        """Remove the given key from the cache. Accept reduced-form keys."""
+        self._check_key(key)
+        _key, _property_name = self._split_key(key)
 
-    def expire(self, **kwargs):
-        self._check_key(**kwargs)
-
-        split_key = self._split_key(kwargs['key'])
-
-        if not split_key[1]:
-            self._cache.delete(split_key[0])
+        # A reduced-form key has been given, so we delete the whole data
+        # concerning this object.
+        if not _property_name:
+            self._cache.delete(_key)
             return
 
-        cache_key = self._cache.get(split_key[0])
-        if cache_key is None:
+        cache_value = self._cache.get(_key)
+
+        # This key doesn't exist, we don't have to do anything.
+        if cache_value is None:
             return
 
-        cache_key.pop(split_key[1], None)
-        self._cache.set(split_key[0], cache_key)
+        # Remove the property from the dict.
+        cache_value.pop(_property_name, None)
+
+        # Store in cache.
+        self._cache.set(_key, cache_value)

@@ -1,18 +1,8 @@
 Warbase
 =======
 
-Introduction
+Dépendances
 ------------
-
-### Contexte
-
-Ce package python sert de base à certaines applications wartisans.
-
-### Objectif
-
-Ce package permet de gérer des utilisateurs, des actions et des valeurs
-
-### Dépendances
 
 * [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.8)
 * [Voluptuous](https://github.com/alecthomas/voluptuous) (0.7)
@@ -35,11 +25,6 @@ dans la base.
 ### warbase.business
 
 Package faisant office de couche business. C'est la seule API censée être
-utilisée.
+directement utilisée.
 
-Fait appel à warbdata pour insérer des données en base.
-
-Documentation
--------------
-
-TODO
+Fait appel à warbase.data pour insérer des données en base.
