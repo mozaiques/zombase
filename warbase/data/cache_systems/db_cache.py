@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm.exc import NoResultFound
 
+from warbase.utils.database import db_method
 from warbase.model.ComputedValue import ComputedValue
 
 
@@ -28,6 +29,7 @@ class DbCache():
 
         return value.value
 
+    @db_method()
     def set(self, key, value):
         self._check_key(key)
 
@@ -43,8 +45,8 @@ class DbCache():
         value_db.value = value
 
         self.session.add(value_db)
-        self.session.commit()
 
+    @db_method()
     def expire(self, key):
         self._check_key(key)
 
@@ -61,5 +63,3 @@ class DbCache():
         for a_val in values_db:
             a_val.expired = True
             self.session.add(a_val)
-
-        self.session.commit()

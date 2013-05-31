@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from warbase.utils.database import db_method
 from warbase.model import Action
 
 from . import DataRepository
@@ -22,6 +23,7 @@ class ActionsData(DataRepository):
         DataRepository.__init__(self, **kwargs)
         self.user = self._get_user(**kwargs)
 
+    @db_method()
     def create(self, **kwargs):
         """Create and insert an action in DB.
 
@@ -36,7 +38,5 @@ class ActionsData(DataRepository):
 
         action = Action.Action(**kwargs)
         self.session.add(action)
-
-        self.session.commit()
 
         return action

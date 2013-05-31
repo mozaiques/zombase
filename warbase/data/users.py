@@ -1,3 +1,4 @@
+from warbase.utils.database import db_method
 from warbase.model import User
 
 from . import DataRepository
@@ -6,6 +7,7 @@ from . import DataRepository
 class UsersData(DataRepository):
     """DataRepository object for users."""
 
+    @db_method()
     def create(self, **kwargs):
         """Create and insert a user in DB.
 
@@ -19,10 +21,9 @@ class UsersData(DataRepository):
         user = User.User(**kwargs)
         self.session.add(user)
 
-        self.session.commit()
-
         return user
 
+    @db_method()
     def add_permission(self, **kwargs):
         """Add a permission to a user.
 
@@ -44,7 +45,5 @@ class UsersData(DataRepository):
 
         if kwargs['permission'] not in user.permissions:
             user.permissions.append(kwargs['permission'])
-
-        self.session.commit()
 
         return user
