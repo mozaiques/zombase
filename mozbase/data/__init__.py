@@ -7,7 +7,7 @@ class DataRepository():
     def __init__(self, dbsession=None, **kwargs):
         """Associate database session to Repository."""
         if not dbsession:
-            raise TypeError('Databse session not provided')
+            raise TypeError('Database session not provided')
 
         self._dbsession = dbsession
 
