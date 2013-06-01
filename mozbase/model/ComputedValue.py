@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import Column, Integer, String, Boolean
-from warbase.utils.sqla import JSONType
+from mozbase.util.database import JSONType
 from sqlalchemy.schema import UniqueConstraint, Index
 
-import warbase.model
+import mozbase.model
 
 
-class ComputedValue(warbase.model.Base):
+class ComputedValue(mozbase.model.Base):
     __tablename__ = 'wb_computed_values'
     id = Column(Integer, primary_key=True)
 

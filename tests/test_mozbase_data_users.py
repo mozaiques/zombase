@@ -4,8 +4,8 @@ import hashlib
 
 from voluptuous import MultipleInvalid
 
-from warbase.model import User
-from warbase.data.users import UsersData
+from mozbase.model import User
+from mozbase.data.users import UsersData
 
 from . import TestData
 
@@ -27,14 +27,14 @@ class TestCreateUser(TestData):
             login='wart',
             mail='a@b.c',
             hash_password=hashlib.sha1('12').hexdigest(),
-            permissions=['warbase'],
+            permissions=['mozbase'],
             firstname=u'Raphaël',
             lastname=u'Gràdübé',)
         self.assertEqual('wart', user.login)
         self.assertEqual('a@b.c', user.mail)
         self.assertEqual(u'Raphaël', user.firstname)
         self.assertEqual(u'Gràdübé', user.lastname)
-        self.assertEqual(['warbase'], user.permissions)
+        self.assertEqual(['mozbase'], user.permissions)
 
     def test_no_mail(self):
         with self.assertRaises(MultipleInvalid):
@@ -45,7 +45,7 @@ class TestCreateUser(TestData):
             self.users_data.create(mail='a@b.c')
 
     def test_add_permission(self):
-        user = self.users_data.create(
+        self.users_data.create(
             login='wart',
             mail='a@b.c')
 

@@ -1,2 +1,2 @@
-SQLAlchemy==0.8.0
-voluptuous==0.7.0
+SQLAlchemy==0.8.1
+voluptuous==0.7.2

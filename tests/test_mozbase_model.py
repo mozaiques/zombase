@@ -1,7 +1,7 @@
  # -*- coding: utf-8 -*-
 import unittest
 
-from warbase.model import User, Action, ComputedValue
+from mozbase.model import User, Action, ComputedValue
 
 from . import TestData
 
@@ -9,15 +9,15 @@ from . import TestData
 class TestModelBase(TestData):
 
     def test_user(self):
-        user = User.User()
+        User.User()
         self.assertTrue(True)
 
     def test_action(self):
-        user = Action.Action()
+        Action.Action()
         self.assertTrue(True)
 
     def test_computed_value(self):
-        user = ComputedValue.ComputedValue()
+        ComputedValue.ComputedValue()
         self.assertTrue(True)
 
 

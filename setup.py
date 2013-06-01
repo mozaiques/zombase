@@ -1,12 +1,11 @@
 from setuptools import setup
 
 setup(
-    name='warbase',
-    version='0.0.1dev',
-    packages=['warbase'],
+    name='mozbase',
+    version='0.2.0',
+    packages=['mozbase'],
     test_suite='tests',
     install_requires=['SQLAlchemy', 'voluptuous'],
     author='Bastien GANDOUET',
-    author_email="bastien@pectoribus.net",
-    license="MIT",
+    author_email="bastien@mozaiqu.es"
 )

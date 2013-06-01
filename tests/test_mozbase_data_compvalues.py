@@ -4,9 +4,9 @@ import unittest
 import pylibmc
 from nose.plugins.skip import SkipTest
 
-from warbase.data.computed_values import ComputedValuesData
-from warbase.data.cache_systems.db_cache import DbCache
-from warbase.data.cache_systems.memcached_cache import MemcachedCache
+from mozbase.data.computed_values import ComputedValuesData
+from mozbase.data.cache_systems.db_cache import DbCache
+from mozbase.data.cache_systems.memcached_cache import MemcachedCache
 
 from . import TestData
 

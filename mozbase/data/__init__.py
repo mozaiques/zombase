@@ -1,4 +1,4 @@
-from warbase.model import User
+from mozbase.model import User
 
 
 class DataRepository():

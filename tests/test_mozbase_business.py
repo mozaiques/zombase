@@ -1,8 +1,8 @@
  # -*- coding: utf-8 -*-
 import unittest
 
-from warbase.data.users import UsersData
-from warbase.biz import BusinessWorker
+from mozbase.data.users import UsersData
+from mozbase.biz import BusinessWorker
 
 from . import TestData
 

@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, Unicode
-from warbase.utils.sqla import JSONType
+from mozbase.util.database import JSONType
 from voluptuous import Schema, Required, All, Length
 
-import warbase.model
+import mozbase.model
 
 
-class User(warbase.model.Base):
+class User(mozbase.model.Base):
     __tablename__ = 'wb_users'
     id = Column(Integer, primary_key=True)
 
@@ -20,7 +20,7 @@ class User(warbase.model.Base):
     lastname = Column(Unicode(length=30))
 
     # These are needed for Flask interface ... does not really make sense in
-    # warbase as we try to be framework agnostic.
+    # mozbase as we try to be framework agnostic.
     def is_authenticated(self):
         return True
 

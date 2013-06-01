@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from warbase.utils.database import db_method
-from warbase.model import Action
+from mozbase.util.database import db_method
+from mozbase.model import Action
 
 from . import DataRepository
 
@@ -28,13 +28,13 @@ class ActionsData(DataRepository):
         """Create and insert an action in DB.
 
         Keyword arguments:
-        see warbase.model.Action.ActionSchema
+        see mozbase.model.Action.ActionSchema
 
         """
         add_datas = {'datetime': datetime.now(),
                      'created_by': self.user}
         kwargs = dict(kwargs.items() + add_datas.items())
-        action_schema = Action.ActionSchema(kwargs)  # Validate datas
+        Action.ActionSchema(kwargs)  # Validate datas
 
         action = Action.Action(**kwargs)
         self.session.add(action)

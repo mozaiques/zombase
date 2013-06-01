@@ -4,8 +4,8 @@ import unittest
 from sqlalchemy.orm.exc import NoResultFound
 from voluptuous import MultipleInvalid
 
-from warbase.model import User
-from warbase.data.actions import ActionsData
+from mozbase.model import User
+from mozbase.data.actions import ActionsData
 
 from . import TestData
 
@@ -29,12 +29,12 @@ class TestCreateAction(TestData):
         del self.actions_data
 
     def test_correct_create(self):
-        action = self.actions_data.create(message=u'Test message')
+        self.actions_data.create(message=u'Test message')
         self.assertTrue(True)
 
     def test_wrong_message(self):
         with self.assertRaises(MultipleInvalid):
-            action = self.actions_data.create(message='Test message')
+            self.actions_data.create(message='Test message')
 
 
 if __name__ == '__main__':

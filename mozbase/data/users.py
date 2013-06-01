@@ -1,5 +1,5 @@
-from warbase.utils.database import db_method
-from warbase.model import User
+from mozbase.util.database import db_method
+from mozbase.model import User
 
 from . import DataRepository
 
@@ -16,7 +16,7 @@ class UsersData(DataRepository):
 
         """
         # Validate datas
-        user_schema = User.UserSchema(kwargs)
+        User.UserSchema(kwargs)
 
         user = User.User(**kwargs)
         self.session.add(user)
@@ -38,7 +38,7 @@ class UsersData(DataRepository):
         if 'permission' not in kwargs:
             raise TypeError('permission missing')
 
-        permission_schema = User.PermissionSchema(kwargs['permission'])
+        User.PermissionSchema(kwargs['permission'])
 
         if not user.permissions:
             user.permissions = [kwargs['permission']]

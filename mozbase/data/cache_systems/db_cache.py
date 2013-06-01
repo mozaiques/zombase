@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm.exc import NoResultFound
 
-from warbase.utils.database import db_method
-from warbase.model.ComputedValue import ComputedValue
+from mozbase.util.database import db_method
+from mozbase.model.ComputedValue import ComputedValue
 
 
 class DbCache():

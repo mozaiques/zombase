@@ -1,4 +1,4 @@
-from warbase.data import DataRepository
+from mozbase.data import DataRepository
 
 
 class AbcBusinessWorker(DataRepository):

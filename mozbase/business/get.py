@@ -1,5 +1,3 @@
-from warbase.model import User
-
 from . import AbcBusinessWorker
 
 
