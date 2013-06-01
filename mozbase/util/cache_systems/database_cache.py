@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.schema import UniqueConstraint, Index
 
-from mozbase.util.database import db_method
-from mozbase.model.ComputedValue import ComputedValue
+from mozbase.util.database import db_method, JSONType
+import mozbase.model
 
 
-class DbCache():
+class DatabaseCache():
 
-    def __init__(self, session):
-        self.session = session
+    def __init__(self, dbsession):
+        self._dbsession = dbsession
 
     def _check_key(self, key):
         if not isinstance(key, str):
@@ -18,7 +20,7 @@ class DbCache():
         self._check_key(key)
 
         try:
-            value = self.session.query(ComputedValue)\
+            value = self._dbsession.query(ComputedValue)\
                 .filter(ComputedValue.key == key)\
                 .one()
         except NoResultFound:
@@ -34,7 +36,7 @@ class DbCache():
         self._check_key(key)
 
         try:
-            value_db = self.session.query(ComputedValue)\
+            value_db = self._dbsession.query(ComputedValue)\
                 .filter(ComputedValue.key == key)\
                 .one()
         except NoResultFound:
@@ -44,22 +46,36 @@ class DbCache():
         value_db.expired = False
         value_db.value = value
 
-        self.session.add(value_db)
+        self._dbsession.add(value_db)
 
     @db_method()
     def expire(self, key):
         self._check_key(key)
 
         if key[-1] == ':':
-            values_db = self.session.query(ComputedValue)\
+            values_db = self._dbsession.query(ComputedValue)\
                 .filter(ComputedValue.key.like(key+'%'))\
                 .all()
         else:
-            value_db = self.session.query(ComputedValue)\
+            value_db = self._dbsession.query(ComputedValue)\
                 .filter(ComputedValue.key == key)\
                 .one()
             values_db = [value_db]
 
         for a_val in values_db:
             a_val.expired = True
-            self.session.add(a_val)
+            self._dbsession.add(a_val)
+
+
+class ComputedValue(mozbase.model.Base):
+    __tablename__ = 'wb_computed_values'
+    id = Column(Integer, primary_key=True)
+
+    key = Column(String)
+
+    expired = Column(Boolean)
+    value = Column(JSONType())
+
+    __table_args__ = (
+        UniqueConstraint('key'),
+        Index('idx_computed_values', 'key'))

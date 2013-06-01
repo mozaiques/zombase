@@ -17,27 +17,27 @@ class transaction():
     """
 
     def __init__(self, dbsession):
-        self.dbsession = dbsession
+        self._dbsession = dbsession
         self.current_thread = threading.current_thread()
 
     def __enter__(self):
-        """Set the thread global `warbase_transaction` attribute."""
+        """Set the thread global `mozbase_transaction` attribute."""
         setattr(self.current_thread, 'warbase_transaction', True)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Unset the thread global `warbase_transaction` attribute and
+        """Unset the thread global `mozbase_transaction` attribute and
         commit the given session.
 
         """
-        setattr(self.current_thread, 'warbase_transaction', False)
-        self.dbsession.commit()
+        setattr(self.current_thread, 'mozbase_transaction', False)
+        self._dbsession.commit()
 
 
 def db_method():
     """Decorator for a database method of a `DataRepository` object.
 
-    The decorated method's object should have its database session
-    stored in self.session`.
+    The decorated method's object must have its database session
+    stored in self._dbsession`.
 
     """
 
@@ -54,7 +54,7 @@ def db_method():
             retval = func(self, *args, **kwargs)
 
             if commit:
-                self.session.commit()
+                self._dbsession.commit()
 
             return retval
 

@@ -5,7 +5,7 @@ import hashlib
 from voluptuous import MultipleInvalid
 
 from mozbase.model import User
-from mozbase.data.users import UsersData
+from mozbase.data.user import UserData
 
 from . import TestData
 
@@ -14,16 +14,16 @@ class TestCreateUser(TestData):
 
     def setUp(self):
         TestData.setUp(self)
-        self.users_data = UsersData(session=self.session)
+        self.user_data = UserData(dbsession=self.session)
 
     def test_correct_minimal_create(self):
-        user = self.users_data.create(login='wart', mail='a@b.c')
+        user = self.user_data.create(login='wart', mail='a@b.c')
         self.assertTrue(isinstance(user, User.User))
         self.assertEqual('wart', user.login)
         self.assertEqual('a@b.c', user.mail)
 
     def test_correct_create(self):
-        user = self.users_data.create(
+        user = self.user_data.create(
             login='wart',
             mail='a@b.c',
             hash_password=hashlib.sha1('12').hexdigest(),
@@ -38,14 +38,14 @@ class TestCreateUser(TestData):
 
     def test_no_mail(self):
         with self.assertRaises(MultipleInvalid):
-            self.users_data.create(login='wart')
+            self.user_data.create(login='wart')
 
     def test_no_login(self):
         with self.assertRaises(MultipleInvalid):
-            self.users_data.create(mail='a@b.c')
+            self.user_data.create(mail='a@b.c')
 
     def test_add_permission(self):
-        self.users_data.create(
+        self.user_data.create(
             login='wart',
             mail='a@b.c')
 

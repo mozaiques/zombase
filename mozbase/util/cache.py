@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class ComputedValuesData():
+class Cache():
     """Unified interface for cache systems."""
 
     def __init__(self):

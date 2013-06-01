@@ -6,8 +6,8 @@ Cette doc est clairement obsolète.
 Dépendances
 ------------
 
-* [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.8)
-* [Voluptuous](https://github.com/alecthomas/voluptuous) (0.7)
+* [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.8.1)
+* [Voluptuous](https://github.com/alecthomas/voluptuous) (0.7.2)
 
 Architecture
 ------------

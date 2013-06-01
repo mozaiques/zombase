@@ -4,8 +4,12 @@ from mozbase.model import User
 from . import DataRepository
 
 
-class UsersData(DataRepository):
+class UserData(DataRepository):
     """DataRepository object for users."""
+
+    def get(self, **kwargs):
+        """Return a fully populated user given a user_id or a SQLA-User."""
+        return self._get_user(**kwargs)
 
     @db_method()
     def create(self, **kwargs):
@@ -19,7 +23,7 @@ class UsersData(DataRepository):
         User.UserSchema(kwargs)
 
         user = User.User(**kwargs)
-        self.session.add(user)
+        self._dbsession.add(user)
 
         return user
 

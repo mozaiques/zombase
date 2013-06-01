@@ -9,7 +9,7 @@ from . import TestData
 class DataRepository(TestData):
 
     def test_instancing_data_repo(self):
-        mozbase.data.DataRepository(session=self.session)
+        mozbase.data.DataRepository(dbsession=self.session)
 
     def test_instancing_data_repo_without_session(self):
         with self.assertRaises(TypeError):

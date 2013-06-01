@@ -4,76 +4,76 @@ import unittest
 import pylibmc
 from nose.plugins.skip import SkipTest
 
-from mozbase.data.computed_values import ComputedValuesData
-from mozbase.data.cache_systems.db_cache import DbCache
-from mozbase.data.cache_systems.memcached_cache import MemcachedCache
+from mozbase.util.cache import Cache
+from mozbase.util.cache_systems.database_cache import DatabaseCache
+from mozbase.util.cache_systems.memcached_cache import MemcachedCache
 
 from . import TestData
 
 
-class CacheBusinessTestSuite():
+class CacheSystemTestSuite():
 
     def test_set_and_get_compval(self):
-        self.cvalues_data.set(
+        self.cache.set(
             key='foo:1:bar',
             value=float(14))
-        val = self.cvalues_data.get(key='foo:1:bar')
+        val = self.cache.get(key='foo:1:bar')
         self.assertEqual(val, float(14))
 
     def test_reset_and_get_compval(self):
-        self.cvalues_data.set(
+        self.cache.set(
             key='foo:1:bar',
             value=float(14))
-        self.cvalues_data.set(
+        self.cache.set(
             key='foo:1:bar',
             value=float(19))
-        val = self.cvalues_data.get(key='foo:1:bar')
+        val = self.cache.get(key='foo:1:bar')
         self.assertEqual(val, float(19))
 
     def test_set_compval_no_value(self):
         with self.assertRaises(TypeError):
-            self.cvalues_data.set(key='foo:1:bar')
+            self.cache.set(key='foo:1:bar')
 
     def test_expire_single_value(self):
-        self.cvalues_data.set(
+        self.cache.set(
             key='foo:1:bar',
             value=float(14))
-        self.cvalues_data.expire(key='foo:1:bar')
-        value = self.cvalues_data.get(key='foo:1:bar')
+        self.cache.expire(key='foo:1:bar')
+        value = self.cache.get(key='foo:1:bar')
         self.assertTrue(not value)
 
     def test_expire_multiple_values(self):
-        self.cvalues_data.set(
+        self.cache.set(
             key='foo:1:bar',
             value=float(14))
-        self.cvalues_data.set(
+        self.cache.set(
             key='foo:1:blo',
             value=float(11))
-        self.cvalues_data.expire(
+        self.cache.expire(
             key='foo:1:')
-        valuebar = self.cvalues_data.get(key='foo:1:bar')
-        valueblo = self.cvalues_data.get(key='foo:1:blo')
+        valuebar = self.cache.get(key='foo:1:bar')
+        valueblo = self.cache.get(key='foo:1:blo')
         self.assertTrue(not valuebar)
         self.assertTrue(not valueblo)
 
 
-class TestComputedValuesDbCache(TestData, CacheBusinessTestSuite):
+class TestDatabaseCache(TestData, CacheSystemTestSuite):
 
     def setUp(self):
         TestData.setUp(self)
-        self.cvalues_data = ComputedValuesData()
-        db_cache = DbCache(session=self.session)
-        self.cvalues_data.append_cache(db_cache)
+        self.cache = Cache()
+        db_cache = DatabaseCache(self.session)
+        self.cache.append_cache(db_cache)
 
 
-class TestComputedValuesMemcachedCache(unittest.TestCase, CacheBusinessTestSuite):
+class TestMemcachedCache(unittest.TestCase, CacheSystemTestSuite):
 
     def setUp(self):
-        self.cvalues_data = ComputedValuesData()
+        self.cache = Cache()
         self.memcached_cache = MemcachedCache(server='127.0.0.1:11211')
-        self.cvalues_data.append_cache(self.memcached_cache)
+        self.cache.append_cache(self.memcached_cache)
         try:
-            self.cvalues_data.set(key='test:1:bla', value=12)
+            self.cache.set(key='test:1:bla', value=12)
         except pylibmc.ConnectionError:
             raise SkipTest
 
