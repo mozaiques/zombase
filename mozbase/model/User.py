@@ -10,7 +10,7 @@ class User(mozbase.model.Base):
     id = Column(Integer, primary_key=True)
 
     # These two fields cannot be null
-    login = Column(String(length=10), unique=True, index=True)  # ASCII only
+    login = Column(String(length=10), unique=True, index=True)
     mail = Column(String(length=50), unique=True, index=True)
 
     hash_password = Column(String(length=40))  # sha1 hash, wo salt
@@ -19,8 +19,8 @@ class User(mozbase.model.Base):
     firstname = Column(Unicode(length=30))
     lastname = Column(Unicode(length=30))
 
-    # These are needed for Flask interface ... does not really make sense in
-    # mozbase as we try to be framework agnostic.
+    # These are needed for Flask interface ... does not really make
+    # sense in mozbase as we try to be framework agnostic.
     def is_authenticated(self):
         return True
 

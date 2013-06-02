@@ -5,20 +5,20 @@ class DataRepository():
     """ABC for data repository objects."""
 
     def __init__(self, dbsession=None, **kwargs):
-        """Associate database session to Repository."""
+        """Associate database session."""
         if not dbsession:
             raise TypeError('Database session not provided')
 
         self._dbsession = dbsession
         self._get = GetWorker(dbsession=dbsession)
 
+
 class GetWorker():
+    """Internal object to perform 'raw' gets."""
 
     def __init__(self, dbsession=None, **kwargs):
-        """Associate database session to Repository."""
         if not dbsession:
             raise TypeError('Database session not provided')
-
         self._dbsession = dbsession
 
     def user(self, user_id=None, user=None, **kwargs):
@@ -40,7 +40,7 @@ class GetWorker():
 
 
 class AuthenticatedDataRepository(DataRepository):
-    """ABC for data repository objects with user information."""
+    """ABC for data repository objects with user informations."""
 
     def __init__(self, dbsession=None, user=None, user_id=None, **kwargs):
         """Associate database session and user to Repository."""

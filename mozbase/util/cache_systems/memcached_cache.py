@@ -6,18 +6,18 @@ class MemcachedCache():
     """Cache system using memcached.
 
     This cache system is designed to only accept keys in the
-    'object_type:object_id:object_property' form (called full-form). In certain
-    cases, keys in the 'object_type:object_id:' form (reduced-form) can be
-    accepted.
+    'object_type:object_id:object_property' form (called full-form). In
+    certain cases, keys in the 'object_type:object_id:' form
+    (reduced-form) can be accepted.
 
-    Internaly we store values with the key 'object_type:object_id', and then
-    in a dict.
+    Internaly we store values with the key 'object_type:object_id', and
+    then in a dict.
 
     """
 
     def __init__(self, server):
-        """Initialize the cache system with the given server. Expect a full
-        server adress, including port. Eg: '127.0.0.1:11211'.
+        """Initialize the cache system with the given server. Expect a
+        full server adress, including port. Eg: '127.0.0.1:11211'.
 
         """
         self._server = server
@@ -32,8 +32,8 @@ class MemcachedCache():
             raise AttributeError('Incorrect key')
 
     def _split_key(self, key):
-        """Split the given key in order to get the 'internal' key and the
-        'internal' property name, and return these two values.
+        """Split the given key in order to get the 'internal' key and
+        the 'internal' property name, and return these two values.
 
         """
         split_key = key.split(':')
@@ -44,8 +44,8 @@ class MemcachedCache():
         self._check_key(key)
         _key, _property_name = self._split_key(key)
 
-        # `cache_value` is None (if there is no corresponding value in memcached)
-        # or is a dict.
+        # `cache_value` is None (if there is no corresponding value in
+        # memcached) or is a dict.
         cache_value = self._cache.get(_key)
 
         if not cache_value or not _property_name in cache_value:
