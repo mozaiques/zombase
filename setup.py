@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='mozbase',
-    version='0.2.0',
+    version='0.2.1',
     packages=['mozbase'],
     test_suite='tests',
     install_requires=['SQLAlchemy', 'voluptuous'],
