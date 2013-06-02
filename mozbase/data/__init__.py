@@ -10,8 +10,18 @@ class DataRepository():
             raise TypeError('Database session not provided')
 
         self._dbsession = dbsession
+        self._get = GetWorker(dbsession=dbsession)
 
-    def _get_user(self, user_id=None, user=None, **kwargs):
+class GetWorker():
+
+    def __init__(self, dbsession=None, **kwargs):
+        """Associate database session to Repository."""
+        if not dbsession:
+            raise TypeError('Database session not provided')
+
+        self._dbsession = dbsession
+
+    def user(self, user_id=None, user=None, **kwargs):
         """Return a user given a user (other SQLA-Session) or a user_id."""
         if user:
             if not isinstance(user, User.User):
@@ -35,4 +45,4 @@ class AuthenticatedDataRepository(DataRepository):
     def __init__(self, dbsession=None, user=None, user_id=None, **kwargs):
         """Associate database session and user to Repository."""
         DataRepository.__init__(self, dbsession)
-        self._user = self._get_user(user_id, user)
+        self._user = self._get.user(user_id, user)

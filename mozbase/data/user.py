@@ -9,7 +9,7 @@ class UserData(DataRepository):
 
     def get(self, **kwargs):
         """Return a fully populated user given a user_id or a SQLA-User."""
-        return self._get_user(**kwargs)
+        return self._get.user(**kwargs)
 
     @db_method()
     def create(self, **kwargs):
@@ -37,7 +37,7 @@ class UserData(DataRepository):
         user_id -- id of the user
 
         """
-        user = self._get_user(**kwargs)
+        user = self._get.user(**kwargs)
 
         if 'permission' not in kwargs:
             raise TypeError('permission missing')
