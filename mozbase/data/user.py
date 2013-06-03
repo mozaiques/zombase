@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from mozbase.util.database import db_method
 from mozbase.model import User
 
@@ -5,18 +6,18 @@ from . import DataRepository
 
 
 class UserData(DataRepository):
-    """DataRepository object for users."""
+    """Data repository object for users."""
 
-    def get(self, **kwargs):
+    def get(self, user_id=None, user=None, **kwargs):
         """Return a fully populated user given a user_id or a SQLA-User."""
-        return self._get.user(**kwargs)
+        return self._get.user(user_id, user)
 
     @db_method()
     def create(self, **kwargs):
         """Create and insert a user in DB.
 
         Keyword arguments:
-        see warbmodel.User.UserSchema
+            see mozbase.model.User.UserSchema
 
         """
         # Validate datas
@@ -28,26 +29,29 @@ class UserData(DataRepository):
         return user
 
     @db_method()
-    def add_permission(self, **kwargs):
+    def add_permission(self, user_id=None, user=None, permission=None,
+                       **kwargs):
         """Add a permission to a user.
 
-        Keyword arguments:
-        permission -- valid permission tuple
-        user -- warbase.model.User.User instance
-        user_id -- id of the user
+        Arguments:
+            user_id -- id of the user (*)
+            user -- mozbase.model.User.User instance (*)
+            permission -- a permission (can be a string, a tuple, ...)
+
+        * at least one is required
 
         """
-        user = self._get.user(**kwargs)
+        user = self._get.user(user_id, user)
 
-        if 'permission' not in kwargs:
+        if not permission:
             raise TypeError('permission missing')
 
-        User.PermissionSchema(kwargs['permission'])
+        User.PermissionSchema(permission)
 
         if not user.permissions:
-            user.permissions = [kwargs['permission']]
+            user.permissions = [ permission ]
 
-        if kwargs['permission'] not in user.permissions:
-            user.permissions.append(kwargs['permission'])
+        if permission not in user.permissions:
+            user.permissions.append(permission)
 
         return user

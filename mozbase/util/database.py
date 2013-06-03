@@ -18,18 +18,18 @@ class transaction():
 
     def __init__(self, dbsession):
         self._dbsession = dbsession
-        self.current_thread = threading.current_thread()
+        self._current_thread = threading.current_thread()
 
     def __enter__(self):
         """Set the thread global `mozbase_transaction` attribute."""
-        setattr(self.current_thread, 'warbase_transaction', True)
+        setattr(self._current_thread, 'mozbase_transaction', True)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Unset the thread global `mozbase_transaction` attribute and
         commit the given session.
 
         """
-        setattr(self.current_thread, 'mozbase_transaction', False)
+        setattr(self._current_thread, 'mozbase_transaction', False)
         self._dbsession.commit()
 
 
@@ -43,7 +43,7 @@ def db_method():
 
     def decorator_func(func):
 
-        def wrapper_func(self, *args, **kwargs):
+        def wrapped_commit_func(self, *args, **kwargs):
 
             # Determine if we'll issue a commit or not. Remove 'commit'
             # from kwargs anyway.
@@ -58,7 +58,7 @@ def db_method():
 
             return retval
 
-        return wrapper_func
+        return wrapped_commit_func
 
     return decorator_func
 
@@ -68,7 +68,7 @@ class JSONType(TypeDecorator):
 
     Example usage:
 
-        permission = JSONType(255)
+        permissions = JSONType(255)
 
     """
 

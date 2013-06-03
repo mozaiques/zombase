@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sqlalchemy import Column, Integer, String, Unicode
 from mozbase.util.database import JSONType
 from voluptuous import Schema, Required, All, Length
