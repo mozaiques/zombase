@@ -4,7 +4,6 @@
 psycopg2==2.5
 pylibmc==1.2.3
 
-
 # Tests part
 nose
 coverage
