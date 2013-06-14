@@ -5,7 +5,7 @@ from data import user, action
 class BusinessWorker():
 
     def __init__(self, dbsession=None, **kwargs):
-        """Init the business worker, create two interfaces to users and
+        """Init the business worker, create two interfaces for users and
         actions.
 
         Arguments:
