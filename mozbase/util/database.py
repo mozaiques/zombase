@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import threading
 import json
 
 from sqlalchemy.types import TypeDecorator, VARCHAR
@@ -18,18 +17,17 @@ class transaction():
 
     def __init__(self, dbsession):
         self._dbsession = dbsession
-        self._current_thread = threading.current_thread()
 
     def __enter__(self):
-        """Set the thread global `mozbase_transaction` attribute."""
-        setattr(self._current_thread, 'mozbase_transaction', True)
+        """Set the `mozbase_transaction` attribute in the session."""
+        setattr(self._dbsession, 'mozbase_transaction', True)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Unset the thread global `mozbase_transaction` attribute and
-        commit the given session.
+        """Unset the `mozbase_transaction` attribute and commit the
+        given session.
 
         """
-        setattr(self._current_thread, 'mozbase_transaction', False)
+        setattr(self._dbsession, 'mozbase_transaction', False)
         self._dbsession.commit()
 
 
@@ -48,7 +46,7 @@ def db_method():
             # Determine if we'll issue a commit or not. Remove 'commit'
             # from kwargs anyway.
             commit = kwargs.pop('commit', True)
-            if getattr(threading.current_thread(), 'mozbase_transaction', False):
+            if getattr(self._dbsession, 'mozbase_transaction', False):
                 commit = False
 
             retval = func(self, *args, **kwargs)

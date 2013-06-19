@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import unittest
-import threading
 
 from mozbase.util import database
 
@@ -26,20 +25,19 @@ class TestDatabase(unittest.TestCase):
     def test_transaction(self):
         self.assertTrue(not self._dbsession.has_been_committed)
         self.assertTrue(
-            not getattr(threading.current_thread(),
+            not getattr(self._dbsession,
                     'mozbase_transaction',
                     False))
 
         with database.transaction(self._dbsession):
             self.assertTrue(not self._dbsession.has_been_committed)
             self.assertTrue(getattr(
-                threading.current_thread(),
-                'mozbase_transaction',
-                False))
+                self._dbsession,
+                'mozbase_transaction'))
 
         self.assertTrue(self._dbsession.has_been_committed)
         self.assertTrue(
-            not getattr(threading.current_thread(),
+            not getattr(self._dbsession,
                     'mozbase_transaction',
                     False))
 

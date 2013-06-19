@@ -14,6 +14,10 @@ class RawDataRepository():
         """
         if not dbsession:
             raise TypeError('Database session not provided')
+
+        if not hasattr(dbsession, 'cache'):
+            raise TypeError('Cache region not associated w/ database session')
+
         self._dbsession = dbsession
 
 
@@ -50,7 +54,6 @@ class AuthenticatedDataRepository(DataRepository):
         self._user = self._get.user(user_id, user)
 
 
-# Should/could be in mozbase.data.subworkers.get. Not really important.
 class GetWorker(RawDataRepository):
     """Internal object to perform 'raw' gets."""
 
