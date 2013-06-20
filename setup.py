@@ -5,7 +5,7 @@ setup(
     version='0.3.0dev',
     packages=['mozbase'],
     test_suite='tests',
-    install_requires=['SQLAlchemy', 'voluptuous'],
+    install_requires=['SQLAlchemy', 'voluptuous', 'dogpile.cache'],
     author='Bastien GANDOUET',
     author_email="bastien@mozaiqu.es"
 )
