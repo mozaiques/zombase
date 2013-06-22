@@ -12,7 +12,7 @@ class TestDatabase(unittest.TestCase):
         def commit(self):
             self.has_been_committed = True
 
-    @database.db_method()
+    @database.db_method
     def fake_method(self):
         pass
 

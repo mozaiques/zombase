@@ -31,7 +31,7 @@ class transaction():
         self._dbsession.commit()
 
 
-def db_method():
+def db_method(func):
     """Decorator for a database method of a `DataRepository` object.
 
     The decorated method's object must have its database session
@@ -39,26 +39,22 @@ def db_method():
 
     """
 
-    def decorator_func(func):
+    def wrapped_commit_func(self, *args, **kwargs):
 
-        def wrapped_commit_func(self, *args, **kwargs):
+        # Determine if we'll issue a commit or not. Remove 'commit'
+        # from kwargs anyway.
+        commit = kwargs.pop('commit', True)
+        if getattr(self._dbsession, 'mozbase_transaction', False):
+            commit = False
 
-            # Determine if we'll issue a commit or not. Remove 'commit'
-            # from kwargs anyway.
-            commit = kwargs.pop('commit', True)
-            if getattr(self._dbsession, 'mozbase_transaction', False):
-                commit = False
+        retval = func(self, *args, **kwargs)
 
-            retval = func(self, *args, **kwargs)
+        if commit:
+            self._dbsession.commit()
 
-            if commit:
-                self._dbsession.commit()
+        return retval
 
-            return retval
-
-        return wrapped_commit_func
-
-    return decorator_func
+    return wrapped_commit_func
 
 
 class JSONType(TypeDecorator):

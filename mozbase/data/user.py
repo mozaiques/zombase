@@ -12,7 +12,7 @@ class UserData(DataRepository):
         """Return a fully populated user given a user_id or a SQLA-User."""
         return self._get.user(user_id, user)
 
-    @db_method()
+    @db_method
     def create(self, **kwargs):
         """Create and insert a user in DB.
 
@@ -28,7 +28,7 @@ class UserData(DataRepository):
 
         return user
 
-    @db_method()
+    @db_method
     def add_permission(self, user_id=None, user=None, permission=None,
                        **kwargs):
         """Add a permission to a user.

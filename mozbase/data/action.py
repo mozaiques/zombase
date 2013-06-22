@@ -10,7 +10,7 @@ from . import AuthenticatedDataRepository
 class ActionData(AuthenticatedDataRepository):
     """Data repository object for actions."""
 
-    @db_method()
+    @db_method
     def create(self, **kwargs):
         """Create and insert an action in DB.
 
