@@ -2,6 +2,8 @@
 import json
 
 from sqlalchemy.types import TypeDecorator, VARCHAR
+from sqlalchemy.orm import object_session
+from dogpile.cache.api import NoValue
 
 
 class transaction():
@@ -55,6 +57,61 @@ def db_method(func):
         return retval
 
     return wrapped_commit_func
+
+
+def cached_property(key_template):
+    """Decorator for a method of a SQLA-object.
+
+    Act like the `@property` decorator, but handle interactions with
+    the cache.
+
+    Argument:
+        key_template -- template of the key that will be used in cache.
+
+    Example usage:
+
+        @cached_property('prestation:{prestation.id}:margin')
+        def margin(self):
+            return self.selling_price - self.cost
+
+    """
+
+    def decorator(func):
+
+        def wrapped(self, *args, **kwargs):
+            cache = object_session(self).cache
+            format_dict = dict()
+            format_dict[self._name] = self
+
+            key = key_template.format(**format_dict)
+            cache_value = cache.get(key)
+
+            # If we have the value in cache, we just return it.
+            if not isinstance(cache_value, NoValue):
+                return cache_value
+
+            # Run the computation
+            value = func(self, *args, **kwargs)
+
+            # Store value in cache
+            cache.set(key, value)
+
+            # Add the new key to the key store
+            key_store_key = self._key_store_key_template.format(**format_dict)
+            key_store = cache.get(key_store_key)
+
+            # If the key_store hasn't been created yet, we initialize it
+            if isinstance(key_store, NoValue):
+                key_store = []
+
+            key_store.append(key)
+            cache.set(key_store_key, key_store)
+
+            return value
+
+        return property(wrapped)
+
+    return decorator
 
 
 class JSONType(TypeDecorator):
