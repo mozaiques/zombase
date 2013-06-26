@@ -60,6 +60,9 @@ def db_method(func):
 class JSONType(TypeDecorator):
     """Represent an immutable structure as a json-encoded string.
 
+    Beware, because of JSON structure, dict can only be keyed with
+    strings (in particular, integer cannot be used as key).
+
     Example usage:
 
         permissions = Column(JSONType(255))
