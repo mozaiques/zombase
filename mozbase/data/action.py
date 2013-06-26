@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from mozbase.util.database import db_method
 from mozbase.model import Action
-
-from . import AuthenticatedDataRepository
+from mozbase.data.fake__init__ import AuthenticatedDataRepository
+from mozbase.util.database import db_method
 
 
 class ActionData(AuthenticatedDataRepository):

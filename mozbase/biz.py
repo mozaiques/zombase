@@ -9,7 +9,7 @@ class BusinessWorker():
         actions.
 
         Arguments:
-            dbsession -- SQLAlchemy database session
+            dbsession -- SQLA database session (patched with cache)
 
         Keyword arguments:
             user_id -- id of the user (*)

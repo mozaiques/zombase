@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from mozbase.util.database import db_method
 from mozbase.model import User
-
-from . import DataRepository
+from mozbase.data.fake__init__ import DataRepository
+from mozbase.util.database import db_method
 
 
 class UserData(DataRepository):
@@ -36,7 +35,7 @@ class UserData(DataRepository):
         Arguments:
             user_id -- id of the user (*)
             user -- mozbase.model.User.User instance (*)
-            permission -- a permission (can be a string, a tuple, ...)
+            permission -- a permission (a string in this implementation)
 
         * at least one is required
 
@@ -49,7 +48,7 @@ class UserData(DataRepository):
         User.PermissionSchema(permission)
 
         if not user.permissions:
-            user.permissions = [ permission ]
+            user.permissions = [permission]
 
         if permission not in user.permissions:
             user.permissions.append(permission)

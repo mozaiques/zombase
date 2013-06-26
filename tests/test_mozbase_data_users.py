@@ -17,37 +17,30 @@ class TestCreateUser(TestData):
         self.user_data = UserData(dbsession=self.session)
 
     def test_correct_minimal_create(self):
-        user = self.user_data.create(login='wart', mail='a@b.c')
+        user = self.user_data.create(email='a@b.c')
         self.assertTrue(isinstance(user, User.User))
-        self.assertEqual('wart', user.login)
-        self.assertEqual('a@b.c', user.mail)
+        self.assertEqual('a@b.c', user.email)
 
     def test_correct_create(self):
         user = self.user_data.create(
-            login='wart',
-            mail='a@b.c',
-            hash_password=hashlib.sha1('12').hexdigest(),
+            email='a@b.c',
+            password_hash=hashlib.sha1('12').hexdigest(),
             permissions=['mozbase'],
-            firstname=u'Raphaël',
-            lastname=u'Gràdübé',)
-        self.assertEqual('wart', user.login)
-        self.assertEqual('a@b.c', user.mail)
-        self.assertEqual(u'Raphaël', user.firstname)
-        self.assertEqual(u'Gràdübé', user.lastname)
+            name=u'Raphaël Gràdübé',
+            shortname=u'Wäert',)
+        self.assertEqual('a@b.c', user.email)
+        self.assertEqual(u'Raphaël Gràdübé', user.name)
+        self.assertEqual(u'Wäert', user.shortname)
         self.assertEqual(['mozbase'], user.permissions)
 
     def test_no_mail(self):
         with self.assertRaises(MultipleInvalid):
             self.user_data.create(login='wart')
 
-    def test_no_login(self):
-        with self.assertRaises(MultipleInvalid):
-            self.user_data.create(mail='a@b.c')
-
     def test_add_permission(self):
-        self.user_data.create(
-            login='wart',
-            mail='a@b.c')
+        us = self.user_data.create(email='a@b.c')
+        self.user_data.add_permission(user=us, permission='bla')
+        self.assertTrue('bla' in us.permissions)
 
 
 if __name__ == '__main__':

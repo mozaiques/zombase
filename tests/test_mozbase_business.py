@@ -12,9 +12,7 @@ class TestGetAvailableApp(TestData):
     def setUp(self):
         TestData.setUp(self)
         self.user_data = UserData(dbsession=self.session)
-        self.user = self.user_data.create(
-            login='wart',
-            mail='a@b.c')
+        self.user = self.user_data.create(email='a@b.c')
         self.user = self.user_data.add_permission(
             user=self.user,
             permission='finances')

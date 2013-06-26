@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from setuptools import setup
 
 setup(
@@ -5,7 +6,6 @@ setup(
     version='0.3.0beta',
     packages=['mozbase'],
     test_suite='tests',
-    install_requires=['SQLAlchemy', 'voluptuous', 'dogpile.cache'],
     author='Bastien GANDOUET',
     author_email="bastien@mozaiqu.es"
 )

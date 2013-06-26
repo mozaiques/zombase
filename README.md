@@ -1,7 +1,7 @@
 mozbase
 =======
 
-Depandencies
+Dependencies
 ------------
 
 * [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.8.1)

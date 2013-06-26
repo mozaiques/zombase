@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-import mozbase.data
+import mozbase.data.fake__init__
 
 from . import TestData
 
@@ -9,11 +9,11 @@ from . import TestData
 class DataRepository(TestData):
 
     def test_instancing_data_repo(self):
-        mozbase.data.DataRepository(dbsession=self.session)
+        mozbase.data.fake__init__.DataRepository(dbsession=self.session)
 
     def test_instancing_data_repo_without_session(self):
         with self.assertRaises(TypeError):
-            mozbase.data.DataRepository()
+            mozbase.data.fake__init__.DataRepository()
 
 
 if __name__ == '__main__':
