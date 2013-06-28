@@ -7,7 +7,7 @@ from mozbase.util.database import db_method
 class UserData(DataRepository):
     """Data repository object for users."""
 
-    def get(self, user_id=None, user=None, **kwargs):
+    def get(self, user_id=None, user=None):
         """Return a fully populated user given a user_id or a SQLA-User."""
         return self._get.user(user_id, user)
 

@@ -7,7 +7,7 @@ from mozbase.data import RawDataRepository
 class GetWorker(RawDataRepository):
     """Internal object to perform 'raw' gets."""
 
-    def user(self, user_id=None, user=None, **kwargs):
+    def user(self, user_id=None, user=None):
         """Return a user given a user (other SQLA-Session) or a user_id.
 
         Argument:
