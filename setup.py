@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 
+
 setup(
     name='mozbase',
     version='0.3.0beta',
