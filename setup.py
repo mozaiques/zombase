@@ -4,13 +4,13 @@ from setuptools import setup
 
 setup(
     name='mozbase',
-    version='0.3.0',
+    version='0.3.1',
     packages=['mozbase'],
     test_suite='tests',
     install_requires=[
-        'SQLAlchemy==0.8.1',
+        'SQLAlchemy==0.8.2',
         'voluptuous==0.7.2',
-        'dogpile.cache==0.4.3'],
+        'dogpile.cache==0.5.0'],
     author='Bastien GANDOUET',
     author_email="bastien@mozaiqu.es"
 )
