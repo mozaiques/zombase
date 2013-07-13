@@ -5,10 +5,9 @@ import re
 from voluptuous import Invalid
 
 
-# from http://stackoverflow.com/a/15292968/2536838
 def Email(msg=None):
     def f(v):
-        if re.match('[\w\.\-]*@[\w\.\-]*\.\w+', v):
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", v):
             return v
         else:
             raise Invalid(msg or ('incorrect email address'))
