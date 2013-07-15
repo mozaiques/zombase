@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import unittest
+import uuid
+import datetime
 
-from mozbase.model import User, Action
+from mozbase.model import User, Action, File
 
 from . import TestData
 
@@ -10,12 +11,18 @@ class TestModelBase(TestData):
 
     def test_user(self):
         User.User()
-        self.assertTrue(True)
 
     def test_action(self):
         Action.Action()
-        self.assertTrue(True)
 
+    def test_file(self):
+        a_uuid = uuid.uuid4()
+        a_file = File.File(
+            uuid=a_uuid,
+            datetime=datetime.datetime.now())
 
-if __name__ == '__main__':
-    unittest.main()
+        self.session.add(a_file)
+        self.session.commit()
+
+        self.session.query(File.File).filter(File.File.uuid == a_uuid).one()
+

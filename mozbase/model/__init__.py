@@ -6,7 +6,7 @@ Also contains some default implementations of the most common objects.
 from sqlalchemy.ext.declarative import declarative_base
 
 
-__all__ = ['User', 'Action']
+__all__ = ['User', 'Action', 'File']
 
 
 Base = declarative_base()
