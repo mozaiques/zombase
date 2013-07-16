@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import unittest
-
 from mozbase.data.user import UserData
 from mozbase.biz import BusinessWorker
 
@@ -16,7 +14,7 @@ class Bla(object):
     user = bli
 
 
-class TestGetAvailableApp(TestData):
+class TestBusinessObject(TestData):
 
     def setUp(self):
         TestData.setUp(self)
@@ -52,6 +50,3 @@ class TestGetAvailableApp(TestData):
         self.biz.patch(bla)
 
         self.assertEqual(self.biz.user.get, bla.user.get)
-
-if __name__ == '__main__':
-    unittest.main()
