@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-import mozbase.data
+from mozbase.data import RawDataRepository
+from mozbase.data.user import UserData
+from mozbase.data.action import ActionData
 
 
-class BusinessWorker(mozbase.data.RawDataRepository):
+class BusinessWorker(RawDataRepository):
 
     def __init__(self, dbsession=None, user_id=None, user=None):
         """Init the business worker, create two interfaces for users and
@@ -16,8 +18,6 @@ class BusinessWorker(mozbase.data.RawDataRepository):
         * at least one is required
 
         """
-        mozbase.data.RawDataRepository.__init__(self, dbsession)
-        self.user = mozbase.data.user.UserData(dbsession=dbsession)
-
-        # user informations must be in **kwargs.
-        self.action = mozbase.data.action.ActionData(dbsession=dbsession, user_id=user_id, user=user)
+        RawDataRepository.__init__(self, dbsession)
+        self.user = UserData(self)
+        self.action = ActionData(self, user_id=user_id, user=user)

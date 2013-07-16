@@ -7,7 +7,10 @@ from . import TestData
 class TestDataRepository(TestData):
 
     def test_instancing_data_repo(self):
-        mozbase.data.fake__init__.DataRepository(dbsession=self.session)
+        class Bli():
+            _dbsession = self.session
+
+        mozbase.data.fake__init__.DataRepository(Bli())
 
     def test_instancing_data_repo_without_session(self):
         with self.assertRaises(TypeError):

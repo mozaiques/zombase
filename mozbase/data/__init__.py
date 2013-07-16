@@ -3,8 +3,8 @@ from voluptuous import Schema
 
 
 class RawDataRepository():
-    """Deepest object, only provide a database session and a cache
-    interface.
+    """Deepest object, only provide a database session (with a cache
+    interface).
 
     """
 
@@ -24,7 +24,7 @@ class RawDataRepository():
 
         self._dbsession = dbsession
 
-    def patch(self, to_patch):
+    def _patch(self, to_patch):
         """Insert properties listed in `_patch_exports` into the given
         object.
 
@@ -47,29 +47,7 @@ class RawDataRepository():
             # We delegate to the children
             if hasattr(prop, '_patch_exports'):
                 to_patch_prop = getattr(to_patch, prop_key)
-                prop.patch(to_patch_prop)
-
-
-class InnerBoDataRepository(RawDataRepository):
-
-    def __init__(self, bo=None, bo_name=None):
-        """Init a DataRepository object.
-
-        Keyword arguments:
-            bo -- reference to the parent business object
-
-        """
-        if not bo:
-            raise TypeError('`bo` not provided')
-
-        if not hasattr(bo, '_dbsession'):
-            raise TypeError('Database session not associated w/ provided bo')
-
-        if not bo_name:
-            bo_name = '_bo'
-
-        setattr(self, 'bo_name', bo)
-        RawDataRepository.__init__(self, bo._dbsession)
+                prop._patch(to_patch_prop)
 
     def _update(self, instance=None, schema=None, **kwargs):
         """Update an instance. Return False if there is no update or the
@@ -111,3 +89,28 @@ class InnerBoDataRepository(RawDataRepository):
             return False
 
         return instance
+
+
+class InnerBoDataRepository(RawDataRepository):
+    """DataRepository intended to be used inside a business object"""
+
+    def __init__(self, bo=None, bo_name=None):
+        """Init a DataRepository object.
+
+        Keyword arguments:
+            bo -- parent business object
+            bo_name -- name that will be given to the parent business
+                       object reference
+
+        """
+        if not bo:
+            raise TypeError('`bo` not provided')
+
+        if not hasattr(bo, '_dbsession'):
+            raise TypeError('Database session not associated w/ provided bo')
+
+        if not bo_name:
+            bo_name = '_bo'
+
+        setattr(self, bo_name, bo)
+        RawDataRepository.__init__(self, bo._dbsession)

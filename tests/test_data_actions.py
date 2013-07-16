@@ -1,28 +1,16 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from sqlalchemy.orm.exc import NoResultFound
 from voluptuous import MultipleInvalid
 
-from mozbase.model import User
-from mozbase.data.action import ActionData
-
 from . import TestData
-
-
-class TestCreateActionsData(TestData):
-
-    def test_wrong_user_id(self):
-        with self.assertRaises(NoResultFound):
-            self.action_data = ActionData(dbsession=self.session, user_id=1)
 
 
 class TestCreateAction(TestData):
 
     def setUp(self):
         TestData.setUp(self)
-        self.action_data = ActionData(dbsession=self.session,
-                                        user=User.User())
+        self.action_data = self.biz.action
 
     def tearDown(self):
         TestData.tearDown(self)

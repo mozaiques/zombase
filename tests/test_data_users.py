@@ -5,7 +5,6 @@ import hashlib
 from voluptuous import MultipleInvalid
 
 from mozbase.model import User
-from mozbase.data.user import UserData
 
 from . import TestData
 
@@ -14,7 +13,7 @@ class TestCreateUser(TestData):
 
     def setUp(self):
         TestData.setUp(self)
-        self.user_data = UserData(dbsession=self.session)
+        self.user_data = self.biz.user
 
     def test_correct_minimal_create(self):
         user = self.user_data.create(email='a@b.c')
