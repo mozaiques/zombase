@@ -7,7 +7,7 @@ from dogpile.cache import make_region
 
 import mozbase.model
 from mozbase.model import *
-from mozbase.biz import BusinessWorker
+from mozbase.biz import BusinessObject
 
 
 class TestData(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestData(unittest.TestCase):
         self.user = User.User(email='a@bb.cc')
         self.session.add(self.user)
         self.session.commit()
-        self.biz = BusinessWorker(dbsession=self.session, user=self.user)
+        self.biz = BusinessObject(dbsession=self.session, user=self.user)
 
     def tearDown(self):
         del self.user

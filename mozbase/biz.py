@@ -4,10 +4,10 @@ from mozbase.data.user import UserData
 from mozbase.data.action import ActionData
 
 
-class BusinessWorker(RawDataRepository):
+class BusinessObject(RawDataRepository):
 
     def __init__(self, dbsession=None, user_id=None, user=None):
-        """Init the business worker, create two interfaces for users and
+        """Init the business object, create two interfaces for users and
         actions.
 
         Arguments:

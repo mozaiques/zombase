@@ -71,14 +71,16 @@ class RawDataRepository():
         if not isinstance(schema, Schema):
             raise AttributeError('schema must be a voluptuous schema')
 
-        obj_current_dict = {k: getattr(instance, k) for k in\
-                            schema.schema if not getattr(instance, k) is None}
+        # Explicitely cast to string properties which come from schema
+        # to deal with Required stuff.
+        obj_current_dict = {str(k): getattr(instance, str(k)) for k in\
+                            schema.schema if not getattr(instance, str(k)) is None}
         obj_update_dict = obj_current_dict.copy()
 
         to_update = [item for item in schema.schema if item in kwargs]
 
         for item in to_update:
-            obj_update_dict[item] = kwargs[item]
+            obj_update_dict[str(item)] = kwargs[item]
 
         schema(obj_update_dict)
 
