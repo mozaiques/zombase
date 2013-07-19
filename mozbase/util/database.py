@@ -116,5 +116,4 @@ class GUIDType(TypeDecorator):
         if value is None:
             return value
         else:
-            print value
             return uuid.UUID(value)

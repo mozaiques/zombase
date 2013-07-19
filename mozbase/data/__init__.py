@@ -77,15 +77,15 @@ class RawDataRepository():
                             schema.schema if not getattr(instance, str(k)) is None}
         obj_update_dict = obj_current_dict.copy()
 
-        to_update = [item for item in schema.schema if item in kwargs]
+        to_update = [item for item in schema.schema if str(item) in kwargs]
 
         for item in to_update:
-            obj_update_dict[str(item)] = kwargs[item]
+            obj_update_dict[str(item)] = kwargs[str(item)]
 
         schema(obj_update_dict)
 
         for item in to_update:
-            setattr(instance, item, kwargs[item])
+            setattr(instance, str(item), kwargs[str(item)])
 
         if obj_update_dict == obj_current_dict:
             return False
