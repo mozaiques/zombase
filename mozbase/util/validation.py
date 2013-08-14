@@ -7,7 +7,7 @@ from voluptuous import Invalid
 
 def Email(msg=None):
     def f(v):
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", v):
+        if re.match(r'^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$', v):
             return v
         else:
             raise Invalid(msg or ('incorrect email address'))
