@@ -5,8 +5,10 @@ Also contains some default implementations of the most common objects.
 """
 from sqlalchemy.ext.declarative import declarative_base
 
+from mozbase.util.database import MetaBase
+
 
 __all__ = ['User', 'Action', 'File']
 
 
-Base = declarative_base()
+Base = declarative_base(cls=MetaBase)

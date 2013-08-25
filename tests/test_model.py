@@ -2,6 +2,7 @@
 import uuid
 import datetime
 
+from mozbase.util.database import MetaBase
 from mozbase.model import User, Action, File
 
 from . import TestData
@@ -26,3 +27,5 @@ class TestModelBase(TestData):
 
         self.session.query(File.File).filter(File.File.uuid == a_uuid).one()
 
+    def test_inheritance(self):
+        self.assertTrue(issubclass(Action.Action, MetaBase))

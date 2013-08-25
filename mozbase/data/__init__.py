@@ -73,7 +73,7 @@ class RawDataRepository():
 
         # Explicitely cast to string properties which come from schema
         # to deal with Required stuff.
-        obj_current_dict = {str(k): getattr(instance, str(k)) for k in\
+        obj_current_dict = {str(k): getattr(instance, str(k)) for k in
                             schema.schema if not getattr(instance, str(k)) is None}
         obj_update_dict = obj_current_dict.copy()
 

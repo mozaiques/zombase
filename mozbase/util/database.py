@@ -6,7 +6,18 @@ from sqlalchemy.types import TypeDecorator, VARCHAR, CHAR
 from sqlalchemy.dialects.postgresql import UUID
 
 
-class transaction():
+class MetaBase(object):
+    """A meta base class for declarative base.
+
+    Example usage:
+
+        isinstance(SomeSQLAClass, MetaBase):
+            ...
+
+    """
+
+
+class transaction(object):
     """Context manager for database operations.
 
     Example usage:
@@ -40,7 +51,6 @@ def db_method(func):
     stored in self._dbsession`.
 
     """
-
     def wrapped_commit_func(self, *args, **kwargs):
 
         # Determine if we'll issue a commit or not. Remove 'commit'
@@ -84,6 +94,7 @@ class JSONType(TypeDecorator):
             value = json.loads(value)
         return value
 
+
 class GUIDType(TypeDecorator):
     """Platform-independent GUID type.
 
@@ -93,6 +104,7 @@ class GUIDType(TypeDecorator):
     Inspired from: http://docs.sqlalchemy.org/en/rel_0_8/core/types.html
 
     """
+
     impl = CHAR
 
     def load_dialect_impl(self, dialect):
