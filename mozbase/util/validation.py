@@ -27,8 +27,8 @@ def adapt_dict(input_dict, keep=None, remove=None, make_required=None):
     """Adapt a validation dictionary.
 
     This is intended to transform "base" dictionaries, with all possible
-    arguments for a model, into create and update schemas. The returned dict
-    can be used to build a Schema.
+    arguments for a model, into create and update schemas. The returned
+    dict can be used to build a Schema.
 
     Keyword arguments:
         input_dict (mandatory) -- initial dictionary
@@ -39,14 +39,11 @@ def adapt_dict(input_dict, keep=None, remove=None, make_required=None):
     If only `d` is given, return Schema(d).
 
     If both `keep` and `remove` are provided, `remove` is ignored.
-    `make_required` (if provided) is applied over the remaining keys after
-    keep or remove, i.e. if a key is removed or not kept and still mentioned in
-    the `make_required` list, it will be ignored.
+    `make_required` (if provided) is applied over the remaining keys
+    after keep or remove, i.e. if a key is removed or not kept and still
+    mentioned in the `make_required` list, it will be ignored.
 
     """
-
-    # Process keep / remove
-
     if keep:
         output_dict = {}
         for k in keep:
@@ -60,7 +57,6 @@ def adapt_dict(input_dict, keep=None, remove=None, make_required=None):
     else:
         output_dict = input_dict.copy()
 
-    # Transform keys of make_required
     if make_required:
         for k in make_required:
             output_dict[Required(k)] = output_dict.pop(k)

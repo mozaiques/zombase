@@ -45,13 +45,17 @@ class TestValidationAdaptDict(unittest.TestCase):
         self.assertEqual(output_dict, {'to_keep': 'dummy',
                                        'to_make_required': 'dummy'})
 
-    # Does not work because Required('to_make_required') cannot be used as a
-    # key to fetch in output_dict...
-    #
-    #def test_make_required(self):
-    #    output_dict = adapt_dict(self.input_dict,
-    #                             make_required=['to_make_required'])
-    #    self.assertTrue(Required('to_make_required') in output_dict)
+    def test_make_required(self):
+        output_dict = adapt_dict(
+            self.input_dict,
+            make_required=['to_make_required'])
+
+        def the_assert(output_dict):
+            for key in output_dict:
+                if str(key) == 'to_make_required' and isinstance(key, Required):
+                    return True
+            return False
+        self.assertTrue(the_assert(output_dict))
 
 if __name__ == '__main__':
     unittest.main()
