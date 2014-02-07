@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup
+from setuptools import setup, find_package
 
 
 setup(
     name='mozbase',
-    version='0.3.11dev',
-    packages=['mozbase'],
+    version='0.3.10',
+    packages=find_package(),
     test_suite='tests',
     install_requires=[
         'SQLAlchemy==0.9.2',
