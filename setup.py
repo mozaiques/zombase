@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mozbase',
-    version='0.3.11dev',
+    version='0.3.10',
     packages=find_packages(),
     test_suite='tests',
     install_requires=[
