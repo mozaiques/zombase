@@ -81,7 +81,10 @@ class InnerBoDataRepository(RawDataRepository):
 
 
 class ObjectManagingDataRepository(InnerBoDataRepository):
-    """DataRepository intended to be used inside a business object"""
+    """DataRepository intended to be used inside a business object, to
+    take care of a specific objects (instances of a SQLA-class).
+
+    """
 
     def __init__(self, bo=None, bo_name=None, managed_object=None,
         managed_object_name=None):
@@ -127,32 +130,6 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
                 .one()
 
         raise TypeError('No criteria provided')
-
-    def get(self, instance_id=None, instance=None, type=None, **kwargs):
-        """Unified external get for an object present in `instance_id`
-        or `instance`, whose type is `type`.
-
-        See also `DataRepository._get()`.
-
-        """
-        if not instance_id and not instance:
-            if not self._managed_object_name:
-                raise TypeError('No criteria provided')
-
-            instance_key = '{}'.format(self._managed_object_name)
-            instance_id_key = '{}_id'.format(self._managed_object_name)
-
-            if instance_key in kwargs:
-                instance = kwargs[instance_key]
-
-            elif instance_id_key in kwargs:
-                instance_id = kwargs[instance_id_key]
-
-        return self._get(instance_id, instance, type)
-
-    def find(self, type=None):
-        """Return a query to fetch multiple objects."""
-        return self._dbsession.query(self._managed_object)
 
     def _update(self, instance=None, schema=None, **kwargs):
         """Update an instance. Return False if there is no update or the
@@ -225,3 +202,60 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
                         a_dict.pop(key_id)
 
         return a_dict
+
+    def get(self, instance_id=None, instance=None, type=None, **kwargs):
+        """Unified external get for an object present in `instance_id`
+        or `instance`, whose type is `type`.
+
+        See also `DataRepository._get()`.
+
+        """
+        if not instance_id and not instance:
+            if not self._managed_object_name:
+                raise TypeError('No criteria provided')
+
+            instance_key = '{}'.format(self._managed_object_name)
+            instance_id_key = '{}_id'.format(self._managed_object_name)
+
+            if instance_key in kwargs:
+                instance = kwargs[instance_key]
+
+            elif instance_id_key in kwargs:
+                instance_id = kwargs[instance_id_key]
+
+        return self._get(instance_id, instance, type)
+
+    def find(self, type=None):
+        """Return a query to fetch multiple objects."""
+        return self._dbsession.query(self._managed_object)
+
+    def serialize(self, items, **kwargs):
+        """Transform the given list of items into an easily serializable
+        list.
+
+        Requires `self.serialize_one()` to be implemented. See this
+        method for informations about `kwargs`.
+
+        """
+        serialized = []
+        for item in items:
+            serialized.append(self.serialize_one(item, **kwargs))
+        return serialized
+
+    def serialize_one(self, item, **kwargs):
+        """Transform the given item into an easily serializable item.
+
+        Most of the time it transforms a SQLA-object into a dict with
+        strings as keys and strings as values.
+
+        Additional functions may be passed in kwargs, their results will
+        be added to the serialized object once they have been executed
+        with the item as single argument. Eg (with key=func):
+
+            result[key] = func(item)
+
+        Subclasses must implement this method to enable
+        `self.serialize()`.
+
+        """
+        raise NotImplementedError
