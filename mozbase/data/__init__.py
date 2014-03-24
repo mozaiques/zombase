@@ -89,7 +89,7 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
 
         Keyword arguments:
             bo & bo_name -- see InnerBoDataRepository
-            managed_object -- object (SQLA-Class) that will me manage
+            managed_object -- object (SQLA-class) that will be managed
                               (eg: mozbase.model.User.User)
             managed_object_name -- name of the object that will be
                                    managed (eg: 'user')
@@ -205,7 +205,7 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
 
         Will fetch `instance` if `instance_id` is in the dict keys, if
         `instance` is accepted by the schema and is supposed to be a
-        SQLA object.
+        SQLA-object.
 
         Additionnally if `instance_id` is not in the schema, it will be
         removed from the dict.
