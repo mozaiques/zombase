@@ -234,12 +234,25 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
         list.
 
         Requires `self.serialize_one()` to be implemented. See this
-        method for informations about `kwargs`.
+        method and `self._serialize_one()` for informations about
+        `kwargs`.
 
         """
         serialized = []
         for item in items:
             serialized.append(self.serialize_one(item, **kwargs))
+        return serialized
+
+    def _serialize_one(self, serialized, item, **kwargs):
+        """Execute functions in `kwargs` with `item` as argument and add
+        the results to `serialized`.
+
+        See `self._serialize_one()` for more explanations.
+
+        """
+        for key in kwargs:
+            serialized[key] = kwargs[key](item)
+
         return serialized
 
     def serialize_one(self, item, **kwargs):
@@ -248,11 +261,16 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
         Most of the time it transforms a SQLA-object into a dict with
         strings as keys and strings as values.
 
-        Additional functions may be passed in kwargs, their results will
-        be added to the serialized object once they have been executed
-        with the item as single argument. Eg (with key=func):
+        Additional functions may be passed in `kwargs`, their results
+        will be added to the serialized object once they have been
+        executed with the item as single argument. Eg (with key=func):
 
             result[key] = func(item)
+
+        A simple implementation would be:
+
+            serialized = {'id': item.id}
+            return self._serialize_one(serialized, item, **kwargs)
 
         Subclasses must implement this method to enable
         `self.serialize()`.
