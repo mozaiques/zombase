@@ -63,8 +63,8 @@ class RawMailer(object):
         )
 
     def _send(self, to, msg):
-        """Subclass must implement this method to actually send the
-        mail
+        """Subclasses must implement this method to actually send the
+        mail.
 
         """
         raise NotImplementedError
