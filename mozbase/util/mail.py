@@ -37,11 +37,10 @@ class RawMailer(object):
         msg = MIMEText(content.encode('utf-8'), 'plain', 'utf-8')
         msg['From'] = config['MAIL_FROM']
         msg['Subject'] = subject
+        msg['To'] = comma_strlist(to)
 
         if config.get('MAIL_OVERRIDE_TO'):
-            msg['Original-To'] = to
             to = config['MAIL_OVERRIDE_TO']
-        msg['To'] = comma_strlist(to)
 
         return self._send(to, msg)
 
