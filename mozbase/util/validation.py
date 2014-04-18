@@ -1,16 +1,30 @@
 # -*- coding: utf-8 -*-
-"""Validation utilities and extra schemas."""
+"""Validation utilities and extra schemas. Mostly built around
+voluptuous.
+
+"""
 import re
 
 from voluptuous import Invalid, Required
 
 
+_email_regexp = re.compile("^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]"
+                           "+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$")
+
+
+def is_valid_email(raw_email):
+    if re.match(_email_regexp, raw_email):
+        return True
+    return False
+
+
 def Email(msg=None):
     def f(v):
-        if re.match(r'^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$', v):
-            return v
-        else:
+        if not is_valid_email(v):
             raise Invalid(msg or ('incorrect email address'))
+        if not v == v.lower():
+            raise Invalid(msg or ('email address should be lowercase'))
+        return v
     return f
 
 
