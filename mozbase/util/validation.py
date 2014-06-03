@@ -34,6 +34,7 @@ def Choice(in_list, msg=None):
             error_msg = 'incorrect choice, expected one of the following: "{}"'\
                 .format(', '.join(in_list))
             raise Invalid(msg or error_msg)
+        return v
     return f
 
 
