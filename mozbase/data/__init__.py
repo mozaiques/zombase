@@ -166,17 +166,17 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
         for item in to_update:
             obj_update_dict[str(item)] = kwargs[str(item)]
 
-        schema(obj_update_dict)
+        obj_update_dict = schema(obj_update_dict)
 
         for item in to_update:
-            setattr(instance, str(item), kwargs[str(item)])
+            setattr(instance, str(item), obj_update_dict[str(item)])
 
         if obj_update_dict == obj_current_dict:
             return False
 
         return instance
 
-    def _resolve_id(self, a_dict, schema):
+    def _resolve_id(self, a_dict, schema, allow_none_id=False):
         """Return a dict fulfilled with the missing objects according to
         the given dict and schema.
 
@@ -187,21 +187,30 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
         Additionnally if `instance_id` is not in the schema, it will be
         removed from the dict.
 
+        If `allow_none_id` is true, passing `instance_id` with value
+        'None' or '""' (empty string) will result in setting `instance`
+        to 'None'.
+
         """
-        a_dict = a_dict.copy()
+        _a_dict = a_dict.copy()
 
         for key, v in schema.schema.iteritems():
-            if not key in a_dict.keys()\
+            if not key in _a_dict.keys()\
                     and inspect.isclass(v)\
                     and issubclass(v, MetaBase):
                 key_id = '{}_id'.format(key)
-                if key_id in a_dict.keys():
-                    a_dict[str(key)] = self._dbsession.query(v)\
-                        .filter(v.id == a_dict.get(key_id)).one()
+                if key_id in _a_dict.keys():
+                    val_id = _a_dict.get(key_id)
+                    if not val_id and allow_none_id:
+                        val = None
+                    else:
+                        val = self._dbsession.query(v)\
+                            .filter(v.id == val_id).one()
+                    _a_dict[str(key)] = val
                     if not key_id in schema.schema:
-                        a_dict.pop(key_id)
+                        _a_dict.pop(key_id)
 
-        return a_dict
+        return _a_dict
 
     def get(self, instance_id=None, instance=None, type=None, **kwargs):
         """Unified external get for an object present in `instance_id`
