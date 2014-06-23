@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from mozbase.data import RawDataRepository
-from mozbase.data.user import UserData
 from mozbase.data.action import ActionData
+from mozbase.data.user import UserData
 
 
 class BusinessObject(RawDataRepository):

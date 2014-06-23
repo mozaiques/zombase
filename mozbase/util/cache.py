@@ -60,12 +60,12 @@ def cached_property(key_template, ksk_tpl=None, cache=None):
             _cache.set(key, value)
 
             if ksk_tpl is None:
-               ksk = self._key_store_key_template.format(**format_dict)
-               key_stores = [ (ksk, _cache.get(ksk)) ]
+                ksk = self._key_store_key_template.format(**format_dict)
+                key_stores = [(ksk, _cache.get(ksk))]
 
             elif isinstance(ksk_tpl, basestring):
                 ksk = ksk_tpl.format(**format_dict)
-                key_stores = [ (ksk, _cache.get(ksk)) ]
+                key_stores = [(ksk, _cache.get(ksk))]
 
             elif isinstance(ksk_tpl, list):
                 key_stores = list()
