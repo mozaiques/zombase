@@ -60,3 +60,15 @@ def compute_semver(current_version, release='normal', compute_dev=True):
         next_dev_version = '{}dev'.format(next_dev_version)
 
     return release_version, next_dev_version
+
+
+def flags_to_release(is_minor=False, is_major=False):
+    """Convert flags to release type."""
+    if is_minor and is_major:
+        raise ValueError("Both `is_minor` and `is_major` are set to 'True'.")
+
+    if is_minor:
+        return 'minor'
+    if is_major:
+        return 'major'
+    return 'normal'

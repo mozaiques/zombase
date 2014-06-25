@@ -11,6 +11,7 @@ setup(
     install_requires=[
         str(ir.req) for ir in parse_requirements('requirements.txt')
     ],
+    scripts=('scripts/mozbase',),
     author='Bastien GANDOUET',
     author_email="bastien@mozaiqu.es"
 )
