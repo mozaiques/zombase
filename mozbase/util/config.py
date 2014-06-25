@@ -12,7 +12,7 @@ class Config(dict):
     or special dictionaries.
 
     Extracted from Flask source, see:
-        - file: flask/config.py
+        - file: flask/flask/config.py
         - commit: 52098e1e4fc4d9c962e9ecb09dfbbcc6ac80a4d7
 
     """

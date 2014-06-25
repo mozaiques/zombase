@@ -62,8 +62,6 @@ def make_release(ctx, minor, major):
     subprocess.call(
         ['git', 'push', 'github', 'master:master', '--tags'], cwd=rootpath)
 
-    click.echo((release_version, next_version))
-
 
 if __name__ == '__main__':
     cli(obj={})

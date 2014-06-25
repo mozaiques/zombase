@@ -4,15 +4,11 @@ mozbase
 Dependencies
 ------------
 
-* [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.9.3)
+* [SQLAlchemy](http://hg.sqlalchemy.org/sqlalchemy) (0.9.6)
 * [Voluptuous](https://github.com/alecthomas/voluptuous) (0.8.5)
-* [dogpile.cache](http://dogpilecache.readthedocs.org/en/latest/) (0.5.3)
+* [dogpile.cache](http://dogpilecache.readthedocs.org/en/latest/) (0.5.4)
+* [click](http://http://click.pocoo.org/) (2.1)
 
-Intended to be used
--------------------
-
-* mozbase.data.RawDataRepository
-* mozbase.util.*
 
 Import order
 ------------
