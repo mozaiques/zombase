@@ -18,8 +18,9 @@ def utils(ctx):
 @utils.command()
 @click.option('--minor', is_flag=True)
 @click.option('--major', is_flag=True)
+@click.option('--nopush', is_flag=True)
 @click.pass_context
-def make_release(ctx, minor, major):
+def make_release(ctx, minor, major, nopush):
     import os
     import subprocess
 
@@ -59,8 +60,9 @@ def make_release(ctx, minor, major):
         ['git', 'commit', '-am', 'This is mozbase ' + next_version],
         cwd=rootpath,
     )
-    subprocess.call(
-        ['git', 'push', 'github', 'master:master', '--tags'], cwd=rootpath)
+    if not nopush:
+        subprocess.call(
+            ['git', 'push', 'github', 'master:master', '--tags'], cwd=rootpath)
 
 
 if __name__ == '__main__':

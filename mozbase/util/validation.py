@@ -29,7 +29,6 @@ def Email(msg=None):
 
 
 def Floatable(empty_to_none=False, msg=None):
-    """Improve `voluptuous.Coerce` to allow empty value to be given."""
     def f(value):
         if not value and empty_to_none:
             return None
@@ -40,10 +39,21 @@ def Floatable(empty_to_none=False, msg=None):
     return f
 
 
+def Integeable(empty_to_none=False, msg=None):
+    def f(value):
+        if not value and empty_to_none:
+            return None
+        try:
+            return int(value)
+        except ValueError:
+            raise Invalid(msg or 'Given value cannot be casted to int')
+    return f
+
+
 def Choice(in_list, msg=None):
     def f(v):
         if not v in in_list:
-            error_msg = 'incorrect choice, expected one of the following: "{}"'\
+            error_msg = 'Incorrect choice, expected one of the following: "{}"'\
                 .format(', '.join(in_list))
             raise Invalid(msg or error_msg)
         return v

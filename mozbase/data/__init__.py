@@ -12,7 +12,7 @@ class RawDataRepository(object):
 
     """
 
-    def __init__(self, dbsession=None):
+    def __init__(self, dbsession):
         """Associate database session.
 
         Argument:
@@ -20,9 +20,6 @@ class RawDataRepository(object):
                          cache
 
         """
-        if not dbsession:
-            raise TypeError('Database session not provided')
-
         if not hasattr(dbsession, 'cache'):
             raise TypeError('Cache region not associated w/ database session')
 
@@ -56,9 +53,9 @@ class RawDataRepository(object):
 
 
 class InnerBoDataRepository(RawDataRepository):
-    """DataRepository intended to be used inside a business object"""
+    """DataRepository intended to be used inside a business object."""
 
-    def __init__(self, bo=None, bo_name=None):
+    def __init__(self, bo, bo_name=None):
         """Init a DataRepository object.
 
         Keyword arguments:
@@ -67,17 +64,11 @@ class InnerBoDataRepository(RawDataRepository):
                        object reference
 
         """
-        if not bo:
-            raise TypeError('`bo` not provided')
-
-        if not hasattr(bo, '_dbsession'):
-            raise TypeError('Database session not associated w/ provided bo')
-
+        RawDataRepository.__init__(self, bo._dbsession)
         if not bo_name:
             bo_name = '_bo'
 
         setattr(self, bo_name, bo)
-        RawDataRepository.__init__(self, bo._dbsession)
 
 
 class ObjectManagingDataRepository(InnerBoDataRepository):
@@ -87,7 +78,7 @@ class ObjectManagingDataRepository(InnerBoDataRepository):
     """
 
     def __init__(self, bo=None, bo_name=None, managed_object=None,
-        managed_object_name=None):
+                 managed_object_name=None):
         """Init a DataRepository object.
 
         Keyword arguments:
