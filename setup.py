@@ -5,7 +5,7 @@ from pip.req import parse_requirements
 
 setup(
     name='mozbase',
-    version='0.5.3',
+    version='0.5.4dev',
     packages=find_packages(),
     test_suite='tests',
     install_requires=[
