@@ -1,9 +1,31 @@
 # -*- coding: utf-8 -*-
+import datetime
+import time
+
 from sqlalchemy.orm import object_session
 from dogpile.cache.api import NoValue
 
 
-def cached_property(key_template, ksk_tpl=None, cache=None):
+def is_valid(timestamp, validity):
+    if validity is None:
+        return True
+
+    if isinstance(timestamp, NoValue):
+        return False
+
+    now = datetime.datetime.now()
+    value_created = datetime.datetime.fromtimestamp(timestamp)
+
+    if validity == 'same_day':
+        delta = now.date() - value_created.date()
+        if delta.days == 0:
+            return True
+        return False
+
+    raise AttributeError('Unknown validity')
+
+
+def cached_property(key_template, ksk_tpl=None, cache=None, validity=None):
     """Decorator for a method of a SQLA-object.
 
     Act like the `@property` decorator, but handle interactions with
@@ -28,6 +50,10 @@ def cached_property(key_template, ksk_tpl=None, cache=None):
 
                  dogpile.cache's region which will be used.
 
+        validity -- None or 'same_day'
+
+                    Validity of the computed value.
+
     Example usage:
 
         @cached_property('prestation:{prestation.id}:margin')
@@ -47,10 +73,15 @@ def cached_property(key_template, ksk_tpl=None, cache=None):
             format_dict = dict(instance=self)
 
             key = key_template.format(**format_dict)
-            cache_value = _cache.get(key)
+            timestamp_key = '__ts:{}'.format(key)
 
-            # If we have the value in cache, we just return it.
-            if not isinstance(cache_value, NoValue):
+            cache_value = _cache.get(key)
+            timestamp = _cache.get(timestamp_key)
+
+            # If we have the value in cache, depending on `validity`,
+            # we just return it.
+            if (not isinstance(cache_value, NoValue)
+                    and is_valid(timestamp, validity)):
                 return cache_value
 
             # Run the computation
@@ -58,6 +89,7 @@ def cached_property(key_template, ksk_tpl=None, cache=None):
 
             # Store value in cache
             _cache.set(key, value)
+            _cache.set(timestamp_key, time.time())
 
             if ksk_tpl is None:
                 ksk = self._key_store_key_template.format(**format_dict)
