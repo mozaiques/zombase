@@ -11,11 +11,12 @@ import six
 
 def _get_keystores(keystores_kt, instance, cache, from_instance=False):
     if keystores_kt is None:
-        if not from_instance:
-            for keystore_tuple in _get_keystores(instance._keystores_kt, instance, cache, from_instance=True):
-                yield keystore_tuple
-        else:
+        if from_instance:
             raise ValueError('`keystores_kt` not provided.')
+
+        for keystore_tuple in _get_keystores(
+                instance._keystores_kt, instance, cache, from_instance=True):
+            yield keystore_tuple
 
     elif isinstance(keystores_kt, six.string_types):
         for keystore_tuple in _get_keystores((keystores_kt,), instance, cache):
