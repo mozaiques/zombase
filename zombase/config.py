@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
 import imp
+import os
 
 
 class ConfigError(KeyError):
@@ -22,7 +22,7 @@ class Config(dict):
             return dict.__getitem__(self, name)
         except KeyError:
             raise ConfigError(
-                'The requested config value, {}, is not set'.format(name))
+                'The requested config value, {}, is not set.'.format(name))
 
     def from_envvar(self, variable_name):
         rv = os.environ.get(variable_name)

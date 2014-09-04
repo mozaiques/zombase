@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from mozbase import cli
+from zombase import cli
 
 
 class TestCLI(unittest.TestCase):

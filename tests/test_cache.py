@@ -3,25 +3,26 @@ import unittest
 
 from dogpile.cache import make_region
 
-from mozbase.util.cache import cached_property
+from zombase.cache import cached_property
 
 
 class TestDatabase(unittest.TestCase):
 
     class FakeObject():
         id = 1
-        _key_store_key_template = 'default_ksk_tpl'
+        _keystores_kt = 'default_ksk_tpl'
 
         def __init__(self, cache):
             self.cache = cache
 
-        @cached_property('fake:{instance.id}:dum', ksk_tpl='bli', cache='cache')
+        @cached_property(
+            'fake:{instance.id}:dum', keystores_kt='bli', cache='cache')
         def dummy(self):
             return 12
 
         @cached_property(
             'fake:{instance.id}:duml',
-            ksk_tpl=['bli:{instance.id}', 'blo:{instance.id}'],
+            keystores_kt=('bli:{instance.id}', 'blo:{instance.id}'),
             cache='cache')
         def dummy_list(self):
             return 13
@@ -57,9 +58,4 @@ class TestDatabase(unittest.TestCase):
 
     def test_default_key(self):
         self.object.dummy_default
-
         self.assertEqual(self.cache.get('default_ksk_tpl'), ['fake:1:dumd'])
-
-
-if __name__ == '__main__':
-    unittest.main()

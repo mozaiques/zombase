@@ -5,7 +5,7 @@ voluptuous.
 """
 import re
 
-from voluptuous import Schema, Invalid, Required
+from voluptuous import Invalid, Required, Schema
 
 
 _email_regexp = re.compile("^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]"
@@ -21,9 +21,9 @@ def is_valid_email(raw_email):
 def Email(msg=None):
     def f(v):
         if not is_valid_email(v):
-            raise Invalid(msg or ('incorrect email address'))
+            raise Invalid(msg or ('Incorrect email address.'))
         if not v == v.lower():
-            raise Invalid(msg or ('email address should be lowercase'))
+            raise Invalid(msg or ('Email address should be lowercase.'))
         return v
     return f
 
@@ -35,7 +35,7 @@ def Floatable(empty_to_none=False, msg=None):
         try:
             return float(value)
         except ValueError:
-            raise Invalid(msg or 'Given value cannot be casted to float')
+            raise Invalid(msg or 'Given value cannot be casted to float.')
     return f
 
 
@@ -46,15 +46,15 @@ def Integeable(empty_to_none=False, msg=None):
         try:
             return int(value)
         except ValueError:
-            raise Invalid(msg or 'Given value cannot be casted to int')
+            raise Invalid(msg or 'Given value cannot be casted to int.')
     return f
 
 
 def Choice(in_list, msg=None):
     def f(v):
         if not v in in_list:
-            error_msg = 'Incorrect choice, expected one of the following: "{}"'\
-                .format(', '.join(in_list))
+            error_msg = ('Incorrect choice, expected one of the following: ',
+                         '"{}".'.format(', '.join(in_list)))
             raise Invalid(msg or error_msg)
         return v
     return f

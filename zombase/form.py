@@ -32,7 +32,7 @@ class CheckboxSelectField(Field):
             self.data = value
 
         else:
-            raise AttributeError('Unrecognized value')
+            raise AttributeError('Unrecognized value.')
 
     def process_formdata(self, valuelist):
         if not valuelist or valuelist[0] in self.false_values:
@@ -62,7 +62,7 @@ class TimeField(Field):
                     time_str, self.format).time()
             except ValueError:
                 self.data = None
-                raise ValueError(self.gettext('Not a valid time value'))
+                raise ValueError(self.gettext('Not a valid time value.'))
 
 
 class CustomIntegerField(IntegerField):

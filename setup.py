@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
 
 
 setup(
-    name='mozbase',
+    name='zombase',
     version='0.5.4dev',
     packages=find_packages(),
     test_suite='tests',
     install_requires=[
-        str(ir.req) for ir in parse_requirements('requirements.txt')
+        'SQLAlchemy==0.9.6',
+        'voluptuous==0.8.5',
+        'dogpile.cache==0.5.4',
+        'click==2.1',
+        'six==1.7.3',
     ],
-    scripts=('scripts/mozbase',),
     author='Bastien GANDOUET',
-    author_email="bastien@mozaiqu.es"
+    author_email="bastien@mozaiqu.es",
 )

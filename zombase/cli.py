@@ -34,11 +34,11 @@ def compute_semver(current_version, release='normal', compute_dev=True):
     """
     if current_version.endswith('dev'):
         dev_version = current_version.replace('dev', '')
-        dev_version_parts = map(int, dev_version.split('.'))
+        dev_version_parts = list(map(int, dev_version.split('.')))
         current_version_parts = dev_version_parts
         current_version_parts[2] -= 1
     else:
-        current_version_parts = map(int, current_version.split('.'))
+        current_version_parts = list(map(int, current_version.split('.')))
 
     release_version_parts = current_version_parts
     if release == 'minor':

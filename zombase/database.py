@@ -2,8 +2,8 @@
 import json
 import uuid
 
-from sqlalchemy.types import TypeDecorator, VARCHAR, CHAR
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import TypeDecorator, VARCHAR, CHAR
 
 
 class MetaBase(object):
@@ -33,14 +33,14 @@ class transaction(object):
 
     def __enter__(self):
         """Set the `mozbase_transaction` attribute in the session."""
-        setattr(self._dbsession, 'mozbase_transaction', True)
+        setattr(self._dbsession, '_zom_in_transaction', True)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Unset the `mozbase_transaction` attribute and commit the
         given session.
 
         """
-        setattr(self._dbsession, 'mozbase_transaction', False)
+        setattr(self._dbsession, '_zom_in_transaction', False)
         self._dbsession.commit()
 
 
@@ -56,7 +56,7 @@ def db_method(func):
         # Determine if we'll issue a commit or not. Remove 'commit'
         # from kwargs anyway.
         commit = kwargs.pop('commit', True)
-        if getattr(self._dbsession, 'mozbase_transaction', False):
+        if getattr(self._dbsession, '_zom_in_transaction', False):
             commit = False
 
         retval = func(self, *args, **kwargs)
@@ -85,13 +85,13 @@ class JSONType(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         if value is not None:
-            value = json.dumps(value)
-        return value
+            return json.dumps(value)
+        return None
 
     def process_result_value(self, value, dialect):
         if value is not None:
-            value = json.loads(value)
-        return value
+            return json.loads(value)
+        return None
 
 
 class GUIDType(TypeDecorator):
@@ -124,7 +124,6 @@ class GUIDType(TypeDecorator):
                 return "%.32x" % value
 
     def process_result_value(self, value, dialect):
-        if value is None:
-            return value
-        else:
+        if value is not None:
             return uuid.UUID(value)
+        return None

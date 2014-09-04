@@ -2,8 +2,6 @@
 """Simple wrapper around standard lib email support."""
 from email.mime.text import MIMEText
 
-from kos.config import config
-
 
 def comma_strlist(strlist):
     if isinstance(strlist, basestring):
@@ -35,12 +33,12 @@ class RawMailer(object):
         (subject, content) = self._render_mail(mail_tpl, mail_args)
 
         msg = MIMEText(content.encode('utf-8'), 'plain', 'utf-8')
-        msg['From'] = config['MAIL_FROM']
+        msg['From'] = self._config['MAIL_FROM']
         msg['Subject'] = subject
         msg['To'] = comma_strlist(to)
 
-        if config.get('MAIL_OVERRIDE_TO'):
-            to = config['MAIL_OVERRIDE_TO']
+        if self._config.get('MAIL_OVERRIDE_TO'):
+            to = self._config['MAIL_OVERRIDE_TO']
 
         return self._send(to, msg)
 
@@ -51,7 +49,7 @@ class RawMailer(object):
             see `send()`
 
         """
-        _mail_args = dict(mail_args.items() + config.items())
+        _mail_args = dict(mail_args.items() + self._config.items())
         template = self._mail_env.get_template(mail_tpl)
         full_mail = template.render(**_mail_args)
 

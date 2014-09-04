@@ -3,7 +3,7 @@ import unittest
 
 from voluptuous import Schema, MultipleInvalid, Required
 
-from mozbase.util.validation import Email, Choice, adapt_dict
+from zombase.validation import Email, Choice, adapt_dict
 
 
 class TestModelBase(unittest.TestCase):
@@ -56,6 +56,3 @@ class TestValidationAdaptDict(unittest.TestCase):
                     return True
             return False
         self.assertTrue(the_assert(output_dict))
-
-if __name__ == '__main__':
-    unittest.main()

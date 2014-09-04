@@ -24,8 +24,8 @@ def make_release(ctx, minor, major, nopush):
     import os
     import subprocess
 
-    from mozbase import __version__
-    from mozbase.cli import (
+    from zombase import __version__
+    from zombase.cli import (
         compute_semver, set_filename_version, flags_to_release)
 
     current_version = __version__
@@ -35,21 +35,21 @@ def make_release(ctx, minor, major, nopush):
     this_filepath = os.path.dirname(__file__)
     rootpath = os.path.abspath(os.path.join(this_filepath, '..'))
 
-    init_filepath = os.path.join(rootpath, 'mozbase/__init__.py')
+    init_filepath = os.path.join(rootpath, 'zombase/__init__.py')
     setup_filepath = os.path.join(rootpath, 'setup.py')
 
     set_filename_version(init_filepath, release_version, '__version__')
     set_filename_version(setup_filepath, release_version, 'version')
 
-    for filename in ('mozbase/__init__.py', 'setup.py'):
+    for filename in ('zombase/__init__.py', 'setup.py'):
         subprocess.call(['git', 'add', filename], cwd=rootpath)
 
     subprocess.call(
-        ['git', 'commit', '-am', 'This is mozbase ' + release_version],
+        ['git', 'commit', '-am', 'This is zombase ' + release_version],
         cwd=rootpath,
     )
     subprocess.call(
-        ['git', 'tag', '-a', release_version, '-m', 'mozbase ' + release_version],
+        ['git', 'tag', '-a', release_version, '-m', 'zombase ' + release_version],
         cwd=rootpath,
     )
 
@@ -57,7 +57,7 @@ def make_release(ctx, minor, major, nopush):
     set_filename_version(setup_filepath, next_version, 'version')
 
     subprocess.call(
-        ['git', 'commit', '-am', 'This is mozbase ' + next_version],
+        ['git', 'commit', '-am', 'This is zombase ' + next_version],
         cwd=rootpath,
     )
     if not nopush:
