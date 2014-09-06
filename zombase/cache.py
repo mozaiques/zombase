@@ -9,16 +9,14 @@ from sqlalchemy.orm import object_session
 import six
 
 
-def _get_keystores(keystores_kt, instance, cache, from_instance=False):
+def _get_keystores(keystores_kt, instance, cache):
     if keystores_kt is None:
-        if from_instance:
+        try:
+            keystores_kt = getattr(instance, '_keystores_kt')
+        except AttributeError:
             raise ValueError('`keystores_kt` not provided.')
 
-        for keystore_tuple in _get_keystores(
-                instance._keystores_kt, instance, cache, from_instance=True):
-            yield keystore_tuple
-
-    elif isinstance(keystores_kt, six.string_types):
+    if isinstance(keystores_kt, six.string_types):
         for keystore_tuple in _get_keystores((keystores_kt,), instance, cache):
             yield keystore_tuple
 

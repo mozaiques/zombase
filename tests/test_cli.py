@@ -45,3 +45,11 @@ class TestCLI(unittest.TestCase):
 
         self.assertEqual(release_version, '2.0.0')
         self.assertEqual(next_dev_version, '2.0.1dev')
+
+    def test_flags(self):
+        self.assertEqual(cli.flags_to_release(is_minor=True), 'minor')
+        self.assertEqual(cli.flags_to_release(is_major=True), 'major')
+        self.assertEqual(cli.flags_to_release(), 'normal')
+
+        with self.assertRaises(ValueError):
+            cli.flags_to_release(is_minor=True, is_major=True)

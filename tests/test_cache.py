@@ -1,14 +1,28 @@
 # -*- coding: utf-8 -*-
+import calendar
+import datetime
+import time
 import unittest
 
 from dogpile.cache import make_region
+from dogpile.cache.api import NoValue
 
-from zombase.cache import cached_property
+from zombase.cache import cached_property, is_valid
 
 
 class TestDatabase(unittest.TestCase):
 
-    class FakeObject():
+    class FakeInvalidObject(object):
+        id = 2
+
+        def __init__(self, cache):
+            self.cache = cache
+
+        @cached_property('fake:{instance.id}:dumdzae', cache='cache')
+        def dummy_default(self):
+            return 14
+
+    class FakeObject(object):
         id = 1
         _keystores_kt = 'default_ksk_tpl'
 
@@ -59,3 +73,42 @@ class TestDatabase(unittest.TestCase):
     def test_default_key(self):
         self.object.dummy_default
         self.assertEqual(self.cache.get('default_ksk_tpl'), ['fake:1:dumd'])
+
+    def test_absent_keystore_kt(self):
+        invalid_object = self.FakeInvalidObject(self.cache)
+        with self.assertRaises(ValueError):
+            self.assertEqual(invalid_object.dummy_default)
+
+    def test_invalid_keystore_kt(self):
+        invalid_object = self.FakeInvalidObject(self.cache)
+        setattr(invalid_object, '_keystores_kt', 2)
+        with self.assertRaises(ValueError):
+            self.assertEqual(invalid_object.dummy_default)
+
+
+class TestValidity(unittest.TestCase):
+
+    def test_none_validity(self):
+        self.assertTrue(is_valid(None, None))
+
+    def test_NoValue_timestamp(self):
+        self.assertFalse(is_valid(NoValue(), 'same_day'))
+
+    def test_same_day(self):
+        self.assertTrue(is_valid(time.time(), 'same_day'))
+
+        today = datetime.date.today()
+        self.assertTrue(is_valid(
+            calendar.timegm(today.timetuple()),
+            'same_day',
+        ))
+
+        yesterday = today - datetime.timedelta(days=1)
+        self.assertFalse(is_valid(
+            calendar.timegm(yesterday.timetuple()),
+            'same_day',
+        ))
+
+    def test_unknown_validity(self):
+        with self.assertRaises(ValueError):
+            is_valid(time.time(), 'same_blo')
