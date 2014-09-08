@@ -12,7 +12,8 @@ class RawWorker(object):
 
     def __init__(self, dbsession, check_sanity=True):
         if check_sanity and not hasattr(dbsession, 'cache'):
-            raise TypeError('Cache region not associated w/ database session.')
+            raise ValueError(
+                'Cache region not associated w/ database session.')
 
         self._dbsession = dbsession
 
@@ -37,7 +38,7 @@ class ObjectManagingWorker(SupervisedWorker):
 
     def __init__(self, foreman=None, foreman_name=None, managed_object=None,
                  managed_object_name=None):
-        ObjectManagingWorker.__init__(self, foreman, foreman_name)
+        SupervisedWorker.__init__(self, foreman, foreman_name)
 
         self._managed_object = managed_object
         self._managed_object_name = managed_object_name
@@ -62,11 +63,11 @@ class ObjectManagingWorker(SupervisedWorker):
                 .filter(type.id == instance_id)\
                 .one()
 
-        raise TypeError('No criteria provided')
+        raise TypeError('No criteria provided.')
 
     def _update(self, instance=None, schema=None, **kwargs):
-        """Update an `instance`. Return False if there is no update or
-        the updated `instance`.
+        """Update an `instance`. Return False if there is no update and
+        True otherwise.
 
         Do not raise error if too many arguments are given.
 
@@ -88,26 +89,25 @@ class ObjectManagingWorker(SupervisedWorker):
 
         # Explicitely cast to string properties which come from schema
         # to deal with `voluptuous.Required` stuff.
+        schema_keys = set([str(k) for k in schema.schema])
+
         obj_current_dict = {
-            str(k): getattr(instance, str(k)) for k in schema.schema
-            if not getattr(instance, str(k)) is None
+            k: getattr(instance, k) for k in schema_keys
+            if not getattr(instance, k) is None
         }
         obj_update_dict = obj_current_dict.copy()
 
-        to_update = [item for item in schema.schema if str(item) in kwargs]
+        to_update = schema_keys.intersection(kwargs.keys())
 
         for item in to_update:
-            obj_update_dict[str(item)] = kwargs[str(item)]
+            obj_update_dict[item] = kwargs[item]
 
         obj_update_dict = schema(obj_update_dict)
 
         for item in to_update:
-            setattr(instance, str(item), obj_update_dict[str(item)])
+            setattr(instance, item, obj_update_dict[item])
 
-        if obj_update_dict == obj_current_dict:
-            return False
-
-        return instance
+        return obj_update_dict != obj_current_dict
 
     def _resolve_id(self, a_dict, schema, allow_none_id=False):
         """Return a dict fulfilled with the missing objects according to
@@ -128,20 +128,22 @@ class ObjectManagingWorker(SupervisedWorker):
         _a_dict = a_dict.copy()
 
         for key, v in schema.schema.iteritems():
-            if not key in _a_dict.keys()\
-                    and inspect.isclass(v)\
-                    and issubclass(v, MetaBase):
-                key_id = '{}_id'.format(key)
-                if key_id in _a_dict.keys():
-                    val_id = _a_dict.get(key_id)
-                    if not val_id and allow_none_id:
-                        val = None
-                    else:
-                        val = self._dbsession.query(v)\
-                            .filter(v.id == val_id).one()
-                    _a_dict[str(key)] = val
-                    if not key_id in schema.schema:
-                        _a_dict.pop(key_id)
+            key_id = '{}_id'.format(key)
+
+            if (not key in _a_dict.keys() and inspect.isclass(v)
+                    and issubclass(v, MetaBase) and key_id in _a_dict.keys()):
+
+                val_id = _a_dict.get(key_id)
+                if not val_id and allow_none_id:
+                    val = None
+
+                else:
+                    val = self._dbsession.query(v)\
+                        .filter(v.id == val_id).one()
+
+                _a_dict[str(key)] = val
+                if not key_id in schema.schema:
+                    _a_dict.pop(key_id)
 
         return _a_dict
 
