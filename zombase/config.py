@@ -4,7 +4,7 @@ import os
 
 
 class ConfigError(KeyError):
-    pass
+    """Exception thrown when the requested key does not exist."""
 
 
 class Config(dict):
