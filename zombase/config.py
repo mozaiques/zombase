@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import imp
-import os
 
 
 class ConfigError(KeyError):
@@ -24,12 +23,15 @@ class Config(dict):
             raise ConfigError(
                 'The requested config value, {}, is not set.'.format(name))
 
-    def from_envvar(self, variable_name):
-        rv = os.environ.get(variable_name)
-        if rv:
-            return self.from_pyfile(rv)
-        raise RuntimeError(
-            'The environment variable {} is not set.'.format(variable_name))
+    def from_dict(self, a_dict):
+        for key in a_dict:
+            if key.isupper():
+                self[key] = a_dict[key]
+
+    def from_object(self, obj):
+        for key in dir(obj):
+            if key.isupper():
+                self[key] = getattr(obj, key)
 
     def from_pyfile(self, filename):
         d = imp.new_module('config')
@@ -38,14 +40,3 @@ class Config(dict):
             exec(compile(config_file.read(), filename, 'exec'), d.__dict__)
 
         self.from_object(d)
-        return True
-
-    def from_object(self, obj):
-        for key in dir(obj):
-            if key.isupper():
-                self[key] = getattr(obj, key)
-
-    def from_dict(self, a_dict):
-        for key in a_dict:
-            if key.isupper():
-                self[key] = a_dict[key]
