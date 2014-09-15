@@ -127,4 +127,32 @@ class TestAdaptDict(unittest.TestCase):
 
 
 class TestSchemaDictNone(unittest.TestCase):
-    pass
+
+    schema_dict = {
+        Required('id'): int,
+        'name': str,
+        'value': int,
+        'target': int,
+    }
+
+    def test_wrong_init(self):
+        with self.assertRaises(ValueError):
+            validation.SchemaDictNone(['a', 'b'])
+
+    def test_basic_schema(self):
+        schema = validation.SchemaDictNone(self.schema_dict)
+
+        data = {'id': 2, 'name': 'bla', 'value': None}
+        new_data = schema(data)
+
+        self.assertEqual(new_data['value'], None)
+        self.assertEqual(new_data['name'], 'bla')
+
+    def test_schema_with_not_none(self):
+        schema = validation.SchemaDictNone(
+            self.schema_dict, not_none=('name',))
+
+        data = {'id': 2, 'value': None, 'name': None}
+
+        with self.assertRaises(MultipleInvalid):
+            schema(data)

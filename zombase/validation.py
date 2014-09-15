@@ -7,6 +7,8 @@ import re
 
 from voluptuous import Invalid, Required, Schema
 
+import six
+
 
 _email_regexp = re.compile("^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]"
                            "+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$")
@@ -141,13 +143,13 @@ class SchemaDictNone(Schema):
             raise ValueError('This special Schema is intented to be used with '
                              'dict only.')
         Schema.__init__(self, schema, required, extra)
-        self._not_none = not_none if not not_none is False else []
+        self._not_none = not_none if not not_none is False else ()
 
     def __call__(self, data):
         _data = data.copy()
         popped = []
 
-        for k, v in data.iteritems():
+        for k, v in six.iteritems(data):
             if v is None and not k in self._not_none:
                 _data.pop(k)
                 popped.append((k, v))
