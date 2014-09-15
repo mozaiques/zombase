@@ -18,45 +18,59 @@ def is_valid_email(raw_email):
     return False
 
 
-def Email(msg=None):
-    def f(v):
-        if not is_valid_email(v):
+def Email(msg=None, lower=False):
+    def f(value):
+        if not is_valid_email(value):
             raise Invalid(msg or ('Incorrect email address.'))
-        if not v == v.lower():
-            raise Invalid(msg or ('Email address should be lowercase.'))
-        return v
+
+        if lower:
+            return value.lower()
+        return value
     return f
 
 
-def Floatable(empty_to_none=False, msg=None):
+def Floatable(empty_to_none=False, cast=True, msg=None):
     def f(value):
         if not value and empty_to_none:
             return None
+
         try:
-            return float(value)
+            casted_value = float(value)
         except ValueError:
             raise Invalid(msg or 'Given value cannot be casted to float.')
+
+        if cast:
+            return casted_value
+        return value
     return f
 
 
-def Integeable(empty_to_none=False, msg=None):
+def Integeable(empty_to_none=False, cast=True, msg=None):
     def f(value):
         if not value and empty_to_none:
             return None
+
         try:
-            return int(value)
+            casted_value = int(value)
         except ValueError:
             raise Invalid(msg or 'Given value cannot be casted to int.')
+
+        if str(value) != str(casted_value):
+            raise Invalid(msg or 'Given value cannot be casted to int.')
+
+        if cast:
+            return casted_value
+        return value
     return f
 
 
 def Choice(in_list, msg=None):
-    def f(v):
-        if not v in in_list:
+    def f(value):
+        if not value in in_list:
             error_msg = ('Incorrect choice, expected one of the following: ',
                          '"{}".'.format(', '.join(in_list)))
             raise Invalid(msg or error_msg)
-        return v
+        return value
     return f
 
 
@@ -124,7 +138,7 @@ class SchemaDictNone(Schema):
 
     def __init__(self, schema, required=False, extra=False, not_none=False):
         if not isinstance(schema, dict):
-            raise ValueError('This special Schema is intented to be used with'
+            raise ValueError('This special Schema is intented to be used with '
                              'dict only.')
         Schema.__init__(self, schema, required, extra)
         self._not_none = not_none if not not_none is False else []
