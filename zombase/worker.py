@@ -3,6 +3,8 @@ import inspect
 
 from voluptuous import Schema
 
+import six
+
 from zombase.database import MetaBase
 
 
@@ -177,33 +179,33 @@ class ObjectManagingWorker(SupervisedWorker):
         """Transform the given list of `items` into an easily
         serializable list.
 
-        Requires `self.serialize_one()` to be implemented. See this
-        method and `self._serialize_one()` for informations about
-        `kwargs`.
+        Requires `self._serialize_one()` to be implemented. See
+        `self.serialize_one()` for informations about `kwargs`.
 
         """
-        serialized = []
         for item in items:
-            serialized.append(self.serialize_one(item, **kwargs))
-        return serialized
+            yield self.serialize_one(item, **kwargs)
 
-    def _serialize_one(self, serialized, item, **kwargs):
-        """Execute functions in `kwargs` with `item` as argument and add
-        the results to `serialized`.
-
-        See `self._serialize_one()` for more explanations.
-
-        """
-        for key in kwargs:
-            serialized[key] = kwargs[key](item)
-
-        return serialized
-
-    def serialize_one(self, item, **kwargs):
+    def _serialize_one(self, item):
         """Transform the given item into an easily serializable item.
 
         Most of the time it transforms a sqlalchemy mapped object into a
         dict with strings as keys and strings as values.
+
+        A simple implementation would be:
+
+            return {'id': item.id}
+
+        Subclasses must implement this method to enable
+        `self.serialize()` and `self.serialize_one()`.
+
+        """
+        raise NotImplementedError('Subclasses must implement '
+                                  '`_serialize_one()`.')
+
+    def serialize_one(self, item, **kwargs):
+        """Leverage `self._serialize_one()` to provide a way to fully
+        serialize a single item.
 
         Additional functions may be passed in `kwargs`, their results
         will be added to the serialized object once they have been
@@ -211,13 +213,10 @@ class ObjectManagingWorker(SupervisedWorker):
 
             result[key] = func(item)
 
-        A simple implementation would be:
-
-            serialized = {'id': item.id}
-            return self._serialize_one(serialized, item, **kwargs)
-
-        Subclasses must implement this method to enable
-        `self.serialize()`.
-
         """
-        raise NotImplementedError
+        serialized = self._serialize_one(item)
+
+        for key, function in six.iteritems(kwargs):
+            serialized[key] = function(item)
+
+        return serialized

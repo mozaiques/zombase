@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import voluptuous
 
 from zombase import worker
