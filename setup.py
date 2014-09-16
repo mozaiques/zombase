@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='zombase',
-    version='0.1.1',
+    version='0.1.2dev',
     packages=find_packages(),
     test_suite='tests',
     install_requires=[
