@@ -53,6 +53,11 @@ def make_release(ctx, minor, major, nopush):
         cwd=rootpath,
     )
 
+    subprocess.call(
+        ['python', 'setup.py', 'sdist', 'bdist_wheel', 'upload', '-r', 'https://testpypi.python.org/pypi'],
+        cwd=rootpath,
+    )
+
     set_filename_version(init_filepath, next_version, '__version__')
     set_filename_version(setup_filepath, next_version, 'version')
 
