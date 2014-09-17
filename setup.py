@@ -22,7 +22,6 @@ setup(
         'SQLAlchemy>=0.9',
         'voluptuous>=0.8',
         'dogpile.cache>=0.5',
-        'click>=3',
         'six>=1.7',
     ],
     classifiers=[
