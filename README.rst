@@ -9,6 +9,6 @@ Dependencies
 
 zombase is built upon the following projects:
 
-* `SQLAlchemy <http://hg.sqlalchemy.org/sqlalchemy>`_
+* `SQLAlchemy <http://http://www.sqlalchemy.org/>`_
 * `dogpile.cache <http://dogpilecache.readthedocs.org/en/latest/>`_
 * `Voluptuous <https://github.com/alecthomas/voluptuous>`_
