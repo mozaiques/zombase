@@ -10,7 +10,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as r_file:
 
 setup(
     name='zombase',
-    version='0.2.6dev',
+    version='0.2.6',
     license='MIT',
     author='Bastien GANDOUET',
     author_email='bastien@mozaiqu.es',
