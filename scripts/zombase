@@ -45,7 +45,7 @@ def make_release(ctx, minor, major, nopush):
         subprocess.call(['git', 'add', filename], cwd=rootpath)
 
     subprocess.call(
-        ['git', 'commit', '-am', 'This is zombase ' + release_version],
+        ['git', 'commit', '-am', 'Release zombase ' + release_version],
         cwd=rootpath,
     )
     subprocess.call(
