@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='zombase',
-    version='0.2.4',
+    version='0.2.5dev',
     license='MIT',
     author='Bastien GANDOUET',
     author_email="bastien@mozaiqu.es",
