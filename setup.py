@@ -12,7 +12,7 @@ setup(
     name='zombase',
     version='0.2.7dev',
     license='MIT',
-    author='Bastien GANDOUET',
+    author='Bastien Gandouet',
     author_email='bastien@mozaiqu.es',
     description='A toolset to build beautiful data layer APIs',
     long_description=readme,
