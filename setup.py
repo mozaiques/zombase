@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+
 from setuptools import setup, find_packages
+
+
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as r_file:
+    readme = r_file.read()
 
 
 setup(
@@ -7,7 +13,9 @@ setup(
     version='0.2.5dev',
     license='MIT',
     author='Bastien GANDOUET',
-    author_email="bastien@mozaiqu.es",
+    author_email='bastien@mozaiqu.es',
+    description='A toolset to build beautiful data layer APIs',
+    long_description=readme,
     packages=find_packages(),
     test_suite='tests',
     install_requires=[
