@@ -1,4 +1,4 @@
-mozbase
+zombase
 =======
 
 Dependencies
