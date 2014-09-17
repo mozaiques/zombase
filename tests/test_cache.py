@@ -24,6 +24,7 @@ class TestDatabase(unittest.TestCase):
 
     class FakeObject(object):
         id = 1
+        _dummy_run = 0
         _keystores_kt = 'default_ksk_tpl'
 
         def __init__(self, cache):
@@ -32,6 +33,9 @@ class TestDatabase(unittest.TestCase):
         @cached_property(
             'fake:{instance.id}:dum', keystores_kt='bli', cache='cache')
         def dummy(self):
+            # Mesure how many times the computation has run
+            self._dummy_run += 1
+
             return 12
 
         @cached_property(
@@ -85,6 +89,14 @@ class TestDatabase(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.assertEqual(invalid_object.dummy_default)
 
+    def test_single_run(self):
+        self.assertEqual(self.object._dummy_run, 0)
+
+        self.object.dummy
+        self.assertEqual(self.object._dummy_run, 1)
+
+        self.object.dummy
+        self.assertEqual(self.object._dummy_run, 1)
 
 class TestValidity(unittest.TestCase):
 
