@@ -132,7 +132,7 @@ class ObjectManagingWorker(SupervisedWorker):
         for key, v in schema.schema.iteritems():
             key_id = '{}_id'.format(key)
 
-            if (not key in _a_dict.keys() and inspect.isclass(v)
+            if (key not in _a_dict.keys() and inspect.isclass(v)
                     and issubclass(v, MetaBase) and key_id in _a_dict.keys()):
 
                 val_id = _a_dict.get(key_id)
@@ -144,7 +144,7 @@ class ObjectManagingWorker(SupervisedWorker):
                         .filter(v.id == val_id).one()
 
                 _a_dict[str(key)] = val
-                if not key_id in schema.schema:
+                if key_id not in schema.schema:
                     _a_dict.pop(key_id)
 
         return _a_dict

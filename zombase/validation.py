@@ -68,7 +68,7 @@ def Integeable(empty_to_none=False, cast=True, msg=None):
 
 def Choice(in_list, msg=None):
     def f(value):
-        if not value in in_list:
+        if value not in in_list:
             error_msg = ('Incorrect choice, expected one of the following: ',
                          '"{}".'.format(', '.join(in_list)))
             raise Invalid(msg or error_msg)
@@ -143,14 +143,14 @@ class SchemaDictNone(Schema):
             raise ValueError('This special Schema is intented to be used with '
                              'dict only.')
         Schema.__init__(self, schema, required, extra)
-        self._not_none = not_none if not not_none is False else ()
+        self._not_none = not_none if not_none is not False else ()
 
     def __call__(self, data):
         _data = data.copy()
         popped = []
 
         for k, v in six.iteritems(data):
-            if v is None and not k in self._not_none:
+            if v is None and k not in self._not_none:
                 _data.pop(k)
                 popped.append((k, v))
 

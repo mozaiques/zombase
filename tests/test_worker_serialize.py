@@ -57,7 +57,7 @@ class TestSerialize(test_worker.BaseTestWorker):
             return item.a_prop * 3
 
         serialized = self.a_worker.serialize_one(fake_item, times_3=times_3)
-        self.assertEqual(serialized['times_3'], fake_item.a_prop*3)
+        self.assertEqual(serialized['times_3'], fake_item.a_prop * 3)
 
     def test_serialize_list(self):
         fake_item1 = test_worker.FakeMapping()
@@ -73,5 +73,5 @@ class TestSerialize(test_worker.BaseTestWorker):
         self.assertEqual(serialized[0]['a_prop'], fake_item1.a_prop)
         self.assertEqual(serialized[1]['a_prop'], fake_item2.a_prop)
 
-        self.assertEqual(serialized[0]['times_2'], fake_item1.a_prop*2)
-        self.assertEqual(serialized[1]['times_2'], fake_item2.a_prop*2)
+        self.assertEqual(serialized[0]['times_2'], fake_item1.a_prop * 2)
+        self.assertEqual(serialized[1]['times_2'], fake_item2.a_prop * 2)
