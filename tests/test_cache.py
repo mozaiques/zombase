@@ -98,6 +98,7 @@ class TestDatabase(unittest.TestCase):
         self.object.dummy
         self.assertEqual(self.object._dummy_run, 1)
 
+
 class TestValidity(unittest.TestCase):
 
     def test_none_validity(self):
