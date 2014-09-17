@@ -54,7 +54,7 @@ def make_release(ctx, minor, major, nopush):
     )
 
     subprocess.call(
-        ['python', 'setup.py', 'sdist', 'bdist_wheel', 'upload', '-r', 'https://testpypi.python.org/pypi'],
+        ['python', 'setup.py', 'sdist', 'bdist_wheel', 'upload'],
         cwd=rootpath,
     )
 
