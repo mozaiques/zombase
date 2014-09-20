@@ -69,8 +69,8 @@ def Integeable(empty_to_none=False, cast=True, msg=None):
 def Choice(in_list, msg=None):
     def f(value):
         if value not in in_list:
-            error_msg = ('Incorrect choice, expected one of the following: ',
-                         '"{}".'.format(', '.join(in_list)))
+            error_msg = 'Incorrect choice, expected one of the '\
+                        'following: "{}".'.format(', '.join(in_list))
             raise Invalid(msg or error_msg)
         return value
     return f

@@ -91,6 +91,14 @@ class TestChoice(unittest.TestCase):
         with self.assertRaises(MultipleInvalid):
             schema('c')
 
+    def test_wrong_choice_in_dict(self):
+        # The error message system is different in a dict.
+        schema = Schema({
+            'bla': validation.Choice(['a', 'b']),
+        })
+        with self.assertRaises(MultipleInvalid):
+            schema({'bla': 'c'})
+
 
 class TestAdaptDict(unittest.TestCase):
 
