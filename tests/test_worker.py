@@ -69,3 +69,10 @@ class TestObjectManagingWorker(BaseTestWorker):
         foreman = FakeForeman()
         worker.ObjectManagingWorker(
             foreman, managed_object=FakeMapping, managed_object_name='fake')
+
+    def test__get(self):
+        foreman = FakeForeman()
+        a_worker = worker.ObjectManagingWorker(
+            foreman, managed_object=FakeMapping, managed_object_name='fake')
+
+        a_worker._get(instance=FakeMapping())

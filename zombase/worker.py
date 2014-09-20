@@ -55,14 +55,14 @@ class ObjectManagingWorker(SupervisedWorker):
 
         """
         if instance:
-            if not isinstance(instance, type):
+            if not isinstance(instance, self._managed_object):
                 raise AttributeError('`instance` doesn\'t match with the '
                                      'registered type.')
             return instance
 
         elif instance_id:
-            return self._dbsession.query(type)\
-                .filter(type.id == instance_id)\
+            return self._dbsession.query(self._managed_object)\
+                .filter(self._managed_object.id == instance_id)\
                 .one()
 
         raise TypeError('No criteria provided.')
