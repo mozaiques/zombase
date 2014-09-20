@@ -183,8 +183,7 @@ class ObjectManagingWorker(SupervisedWorker):
         `self.serialize_one()` for informations about `kwargs`.
 
         """
-        for item in items:
-            yield self.serialize_one(item, **kwargs)
+        return [self.serialize_one(item, **kwargs) for item in items]
 
     def _serialize_one(self, item):
         """Transform the given item into an easily serializable item.
