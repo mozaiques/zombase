@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 import unittest
+import uuid
 
 from voluptuous import Schema, MultipleInvalid, Required
 
 from zombase import validation
+
+
+class TestUUID(unittest.TestCase):
+
+    def test_uuid(self):
+        self.assertTrue(validation.is_valid_uuid(uuid.uuid4()))
+        self.assertTrue(validation.is_valid_uuid(str(uuid.uuid4())))
+        self.assertFalse(validation.is_valid_uuid('bla'))
 
 
 class TestEmail(unittest.TestCase):

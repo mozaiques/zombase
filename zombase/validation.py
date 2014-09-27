@@ -4,10 +4,23 @@ voluptuous.
 
 """
 import re
+import uuid
 
 from voluptuous import Invalid, Required, Schema
 
 import six
+
+
+def is_valid_uuid(value):
+    if isinstance(value, uuid.UUID):
+        return True
+
+    try:
+        maybe_value = uuid.UUID(value, version=4)
+    except ValueError:
+        return False
+
+    return maybe_value.hex == value.replace('-', '').replace(' ', '')
 
 
 _email_regexp = re.compile("^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]"
