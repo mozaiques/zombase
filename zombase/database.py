@@ -32,11 +32,11 @@ class transaction(object):
         self._dbsession = dbsession
 
     def __enter__(self):
-        """Set the `mozbase_transaction` attribute in the session."""
+        """Set the `_zom_in_transaction` attribute in the session."""
         setattr(self._dbsession, '_zom_in_transaction', True)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Unset the `mozbase_transaction` attribute and commit the
+        """Unset the `_zom_in_transaction` attribute and commit the
         given session.
 
         """
