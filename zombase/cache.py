@@ -22,7 +22,7 @@ def _get_keystores(keystores_kt, instance, cache):
 
     elif isinstance(keystores_kt, collections.Iterable):
         for keystore_kt in keystores_kt:
-            keystore_key = keystore_kt.format(instance=instance)
+            keystore_key = keystore_kt.format(instance=instance, it=instance)
             yield (keystore_key, cache.get(keystore_key))
 
     else:
@@ -79,7 +79,7 @@ def cached_property(kt, keystores_kt=None, cache=None, validity=None):
 
     Example usage:
 
-        @cached_property('prestation:{prestation.id}:margin')
+        @cached_property('prestation:{it.id}:margin')
         def margin(self):
             return self.selling_price - self.cost
 
@@ -93,7 +93,7 @@ def cached_property(kt, keystores_kt=None, cache=None, validity=None):
             else:
                 _cache = object_session(self).cache
 
-            format_dict = dict(instance=self)
+            format_dict = dict(instance=self, it=self)
 
             key = kt.format(**format_dict)
             timestamp_key = '_zom_ts:{}'.format(key)

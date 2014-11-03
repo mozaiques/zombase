@@ -18,7 +18,7 @@ class TestDatabase(unittest.TestCase):
         def __init__(self, cache):
             self.cache = cache
 
-        @cached_property('fake:{instance.id}:dumdzae', cache='cache')
+        @cached_property('fake:{it.id}:dumdzae', cache='cache')
         def dummy_default(self):
             return 14
 
@@ -31,7 +31,7 @@ class TestDatabase(unittest.TestCase):
             self.cache = cache
 
         @cached_property(
-            'fake:{instance.id}:dum', keystores_kt='bli', cache='cache')
+            'fake:{it.id}:dum', keystores_kt='bli', cache='cache')
         def dummy(self):
             # Mesure how many times the computation has run
             self._dummy_run += 1
@@ -39,13 +39,13 @@ class TestDatabase(unittest.TestCase):
             return 12
 
         @cached_property(
-            'fake:{instance.id}:duml',
-            keystores_kt=('bli:{instance.id}', 'blo:{instance.id}'),
+            'fake:{it.id}:duml',
+            keystores_kt=('bli:{it.id}', 'blo:{it.id}'),
             cache='cache')
         def dummy_list(self):
             return 13
 
-        @cached_property('fake:{instance.id}:dumd', cache='cache')
+        @cached_property('fake:{it.id}:dumd', cache='cache')
         def dummy_default(self):
             return 14
 
