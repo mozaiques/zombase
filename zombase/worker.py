@@ -45,7 +45,7 @@ class ObjectManagingWorker(SupervisedWorker):
         self._managed_object = managed_object
         self._managed_object_name = managed_object_name
 
-    def _get(self, instance_id=None, instance=None):
+    def _get(self, instance_id=None, instance=None, options=None):
         """Unified internal get for an object present in `instance_id`
         or `instance`, whose type is `self._managed_object`.
 
@@ -61,8 +61,11 @@ class ObjectManagingWorker(SupervisedWorker):
             return instance
 
         elif instance_id:
+            if options is None:
+                options = []
             return self._dbsession.query(self._managed_object)\
                 .filter(self._managed_object.id == instance_id)\
+                .options(*options)\
                 .one()
 
         raise TypeError('No criteria provided.')
@@ -149,7 +152,7 @@ class ObjectManagingWorker(SupervisedWorker):
 
         return _a_dict
 
-    def get(self, instance_id=None, instance=None, **kwargs):
+    def get(self, instance_id=None, instance=None, options=None, **kwargs):
         """Unified external get for an object present in `instance_id`
         or `instance`.
 
@@ -169,7 +172,7 @@ class ObjectManagingWorker(SupervisedWorker):
             elif instance_id_key in kwargs:
                 instance_id = kwargs[instance_id_key]
 
-        return self._get(instance_id, instance)
+        return self._get(instance_id, instance, options)
 
     def find(self):
         """Return a query to fetch multiple objects."""
