@@ -39,23 +39,30 @@ class ObjectManagingWorker(SupervisedWorker):
     """
 
     def __init__(self, foreman=None, foreman_name=None, managed_object=None,
-                 managed_object_name=None):
+                 managed_object_name=None, id_type=None):
         SupervisedWorker.__init__(self, foreman, foreman_name)
 
-        self._managed_object = managed_object
-        self._managed_object_name = managed_object_name
+        self._object = managed_object
+        self._object_name = managed_object_name
+
+        if id_type and id_type not in ('id', 'uuid'):
+            raise AttributeError('Wrong `id_type`.')
+        self._with_id = (id_type == 'id' or hasattr(self._object, 'id'))
+        self._with_uuid = (id_type == 'uuid' or hasattr(self._object, 'uuid'))
 
     def _get(self, instance_id=None, instance=None, options=None):
         """Unified internal get for an object present in `instance_id`
-        or `instance`, whose type is `self._managed_object`.
+        or `instance`, whose type is `self._object`.
 
         Keyword arguments:
-            instance_id -- id of the requested object
+            instance_id -- id (could be a "real" integer id or an uuid)
+                           of the requested object
             instance -- object (internal use)
+            options -- list of SQLA options to apply to the SQL request
 
         """
         if instance:
-            if not isinstance(instance, self._managed_object):
+            if not isinstance(instance, self._object):
                 raise AttributeError('`instance` doesn\'t match with the '
                                      'registered type.')
             return instance
@@ -63,9 +70,16 @@ class ObjectManagingWorker(SupervisedWorker):
         elif instance_id:
             if options is None:
                 options = []
-            return self._dbsession.query(self._managed_object)\
-                .filter(self._managed_object.id == instance_id)\
-                .options(*options)\
+            query = self._dbsession.query(self._object)
+
+            if self._with_id:
+                query = query.filter(self._object.id == instance_id)
+            elif self._with_uuid:
+                query = query.filter(self._object.uuid == instance_id)
+            else:
+                raise StandardError('Can\'t determine id field.')
+
+            return query.options(*options)\
                 .one()
 
         raise TypeError('No criteria provided.')
@@ -160,11 +174,16 @@ class ObjectManagingWorker(SupervisedWorker):
 
         """
         if not instance_id and not instance:
-            if not self._managed_object_name:
+            if not self._object_name:
                 raise TypeError('No criteria provided.')
 
-            instance_key = '{}'.format(self._managed_object_name)
-            instance_id_key = '{}_id'.format(self._managed_object_name)
+            instance_key = '{}'.format(self._object_name)
+            if self._with_id:
+                instance_id_key = '{}_id'.format(self._object_name)
+            elif self._with_uuid:
+                instance_id_key = '{}_uuid'.format(self._object_name)
+            else:
+                raise StandardError('Can\'t determine id field.')
 
             if instance_key in kwargs:
                 instance = kwargs[instance_key]
@@ -172,11 +191,14 @@ class ObjectManagingWorker(SupervisedWorker):
             elif instance_id_key in kwargs:
                 instance_id = kwargs[instance_id_key]
 
+            else:
+                raise TypeError('No criteria provided.')
+
         return self._get(instance_id, instance, options)
 
     def find(self):
         """Return a query to fetch multiple objects."""
-        return self._dbsession.query(self._managed_object)
+        return self._dbsession.query(self._object)
 
     def serialize(self, items, **kwargs):
         """Transform the given list of `items` into an easily
