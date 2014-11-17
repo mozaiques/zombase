@@ -110,3 +110,11 @@ class TestWorkerIDs(unittest.TestCase):
 
         self.assertTrue(a_second_worker._with_id)
         self.assertFalse(a_second_worker._with_uuid)
+
+        with self.assertRaises(AttributeError):
+            worker.ObjectManagingWorker(
+                foreman,
+                managed_object=FakeMapping,
+                managed_object_name='fake',
+                id_type='wrong',
+            )
