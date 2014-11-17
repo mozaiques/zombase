@@ -146,11 +146,14 @@ class ObjectManagingWorker(SupervisedWorker):
         """
         _a_dict = a_dict.copy()
 
-        for key, v in schema.schema.iteritems():
+        for key, v in six.iteritems(schema.schema):
+            if key in _a_dict.keys():
+                continue
+
             key_id = '{}_id'.format(key)
 
-            if (key not in _a_dict.keys() and inspect.isclass(v)
-                    and issubclass(v, MetaBase) and key_id in _a_dict.keys()):
+            if (key_id in _a_dict.keys() and inspect.isclass(v)
+                    and issubclass(v, MetaBase)):
 
                 val_id = _a_dict.get(key_id)
                 if not val_id and allow_none_id:
