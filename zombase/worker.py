@@ -79,8 +79,7 @@ class ObjectManagingWorker(SupervisedWorker):
             else:
                 raise StandardError('Can\'t determine id field.')
 
-            return query.options(*options)\
-                .one()
+            return query.options(*options).one()
 
         raise TypeError('No criteria provided.')
 
@@ -132,9 +131,9 @@ class ObjectManagingWorker(SupervisedWorker):
         """Return a dict fulfilled with the missing objects according to
         the given dict (in `a_dict`) and `schema`.
 
-        Will fetch `instance` if `instance_id` is in the dict keys, if
-        `instance` is accepted by the schema and is supposed to be a
-        sqlalchemy mapping.
+        Will fetch `instance` if `instance_id` (or `instance_uuid`) is
+        in the dict keys, if `instance` is accepted by the schema and is
+        supposed to be a sqlalchemy mapping.
 
         Additionnally if `instance_id` is not in the schema, it will be
         removed from the dict.
@@ -146,26 +145,42 @@ class ObjectManagingWorker(SupervisedWorker):
         """
         _a_dict = a_dict.copy()
 
-        for key, v in six.iteritems(schema.schema):
+        for key, value in six.iteritems(schema.schema):
             if key in _a_dict.keys():
                 continue
 
+            if not inspect.isclass(value) or not issubclass(value, MetaBase):
+                continue
+
             key_id = '{}_id'.format(key)
+            key_uuid = '{}_uuid'.format(key)
 
-            if (key_id in _a_dict.keys() and inspect.isclass(v)
-                    and issubclass(v, MetaBase)):
+            if key_id in a_dict and key_uuid in a_dict:
+                raise Exception('`_resolve_id()` has been called with '
+                                'both an `instance_id` and an '
+                                '`instance_uuid`.')
 
-                val_id = _a_dict.get(key_id)
+            elif key_id in a_dict:
+                val_id = _a_dict.pop(key_id)
                 if not val_id and allow_none_id:
                     val = None
 
                 else:
-                    val = self._dbsession.query(v)\
-                        .filter(v.id == val_id).one()
+                    val = self._dbsession.query(value)\
+                        .filter(value.id == val_id).one()
 
                 _a_dict[str(key)] = val
-                if key_id not in schema.schema:
-                    _a_dict.pop(key_id)
+
+            elif key_uuid in a_dict:
+                val_uuid = _a_dict.pop(key_uuid)
+                if not val_uuid and allow_none_id:
+                    val = None
+
+                else:
+                    val = self._dbsession.query(value)\
+                        .filter(value.uuid == val_uuid).one()
+
+                _a_dict[str(key)] = val
 
         return _a_dict
 

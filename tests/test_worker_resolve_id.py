@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
+import uuid
 
 from sqlalchemy import create_engine, Column, Integer
 from sqlalchemy.orm import sessionmaker
@@ -18,8 +19,17 @@ class Mapping(Base):
     id = Column(Integer, primary_key=True)
 
 
+class MappingUUID(Base):
+    __tablename__ = 'mappings_uuid'
+    uuid = Column(database.GUIDType, primary_key=True, default=uuid.uuid4)
+
+
 schema = Schema({
     'mapping': Mapping,
+})
+
+schema_uuid = Schema({
+    'mapping': MappingUUID,
 })
 
 
@@ -49,6 +59,18 @@ class TestWorkerResolveID(unittest.TestCase):
         a_dict = self.worker._resolve_id(a_dict, schema=schema)
 
         self.assertFalse('mapping_id' in a_dict)
+        self.assertTrue('mapping' in a_dict)
+
+    def test_simple_resolve_uuid(self):
+        an_uuid = uuid.uuid4()
+        mapping = MappingUUID(uuid=an_uuid)
+        self.worker._dbsession.add(mapping)
+        self.worker._dbsession.commit()
+
+        a_dict = {'mapping_uuid': an_uuid}
+        a_dict = self.worker._resolve_id(a_dict, schema=schema_uuid)
+
+        self.assertFalse('mapping_uuid' in a_dict)
         self.assertTrue('mapping' in a_dict)
 
     def test_resolve_id_with_none(self):
