@@ -7,15 +7,19 @@ def fstrip(value):
     return value.replace(' ', '')
 
 
-def lcast_int(value):
+def lcast_int(value, strip=False):
     """Locale-aware cast a value to an integer."""
     if isinstance(value, int):
         return value
+    if strip:
+        value = fstrip(value)
     return locale.atoi(value)
 
 
-def lcast_float(value):
+def lcast_float(value, strip=False):
     """Locale-aware cast a value to a float."""
     if isinstance(value, float):
         return value
+    if strip:
+        value = fstrip(value)
     return locale.atof(value)
