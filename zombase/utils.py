@@ -8,10 +8,14 @@ def fstrip(value):
 
 
 def lcast_int(value):
-    """Locale-aware cast a string to an integer."""
+    """Locale-aware cast a value to an integer."""
+    if isinstance(value, int):
+        return value
     return locale.atoi(value)
 
 
 def lcast_float(value):
-    """Locale-aware cast a string to a float."""
+    """Locale-aware cast a value to a float."""
+    if isinstance(value, float):
+        return value
     return locale.atof(value)
