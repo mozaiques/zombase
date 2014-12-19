@@ -3,8 +3,11 @@ import locale
 
 
 def fstrip(value):
-    """Stand for "full strip", return a space-less version of a string."""
-    return value.replace(' ', '')
+    """Stand for "full strip", return a space-less version of a (unicode)
+    string.
+
+    """
+    return value.replace(u'\xa0', u'').replace(u' ', u'')
 
 
 def lcast_int(value, strip=False):

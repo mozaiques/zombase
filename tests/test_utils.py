@@ -8,6 +8,7 @@ class TestUtils(unittest.TestCase):
 
     def test_fstrip(self):
         self.assertEqual(utils.fstrip('1 1 1'), '111')
+        self.assertEqual(utils.fstrip(u'1\xa01 1'), '111')
 
     def test_lcast_int(self):
         self.assertEqual(utils.lcast_int(8), 8)
