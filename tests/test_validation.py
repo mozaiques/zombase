@@ -56,8 +56,12 @@ class TestFloatable(unittest.TestCase):
 
     def test_invalid_floatable(self):
         schema = Schema(validation.Floatable())
+
         with self.assertRaises(MultipleInvalid):
             schema('3.a')
+
+        with self.assertRaises(MultipleInvalid):
+            schema(None)
 
 
 class TestIntegeable(unittest.TestCase):
@@ -87,6 +91,9 @@ class TestIntegeable(unittest.TestCase):
 
         with self.assertRaises(MultipleInvalid):
             schema(3.2)
+
+        with self.assertRaises(MultipleInvalid):
+            schema(None)
 
 
 class TestChoice(unittest.TestCase):

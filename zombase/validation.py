@@ -51,7 +51,7 @@ def Floatable(empty_to_none=False, cast=True, msg=None):
 
         try:
             casted_value = float(value)
-        except ValueError:
+        except (ValueError, TypeError):
             raise Invalid(msg or 'Given value cannot be casted to float.')
 
         if cast:
@@ -67,7 +67,7 @@ def Integeable(empty_to_none=False, cast=True, msg=None):
 
         try:
             casted_value = int(value)
-        except ValueError:
+        except (ValueError, TypeError):
             raise Invalid(msg or 'Given value cannot be casted to int.')
 
         if str(value) != str(casted_value):
