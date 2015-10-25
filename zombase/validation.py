@@ -3,6 +3,7 @@
 voluptuous.
 
 """
+import decimal
 import re
 import uuid
 
@@ -72,6 +73,22 @@ def Integeable(empty_to_none=False, cast=True, msg=None):
 
         if str(value) != str(casted_value):
             raise Invalid(msg or 'Given value cannot be casted to int.')
+
+        if cast:
+            return casted_value
+        return value
+    return f
+
+
+def Decimable(empty_to_none=False, cast=True, msg=None):
+    def f(value):
+        if value in [None, ''] and empty_to_none:
+            return None
+
+        try:
+            casted_value = decimal.Decimal(value)
+        except decimal.InvalidOperation:
+            raise Invalid(msg or 'Given value cannot be casted to a decimal.')
 
         if cast:
             return casted_value
