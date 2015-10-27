@@ -53,7 +53,7 @@ class MappingManagingWorker(SupervisedWorker):
         """
         return self._dbsession.query(self._sqla_map)
 
-    def _get(self, sqla_obj_id=None, sqla_obj=None, options=None):
+    def _get(self, sqla_obj_id=None, sqla_obj=None, options=None, **kwargs):
         """Unified internal get for a SQLAlchemy object present in
         `sqla_obj_id` or `sqla_obj`, whose type is `self._sqla_map`.
 
@@ -72,9 +72,7 @@ class MappingManagingWorker(SupervisedWorker):
             return sqla_obj
 
         elif sqla_obj_id:
-            if options is None:
-                options = []
-            query = self._base_query()
+            query = self._base_query(**kwargs)
 
             if self._with_id:
                 query = query.filter(self._sqla_map.id == sqla_obj_id)
@@ -82,6 +80,9 @@ class MappingManagingWorker(SupervisedWorker):
                 query = query.filter(self._sqla_map.uuid == sqla_obj_id)
             else:
                 raise ZombaseRuntimeError('Can\'t determine id field.')
+
+            if options is None:
+                options = []
 
             return query.options(*options).one()
 
@@ -115,11 +116,11 @@ class MappingManagingWorker(SupervisedWorker):
             else:
                 raise TypeError('No criteria provided.')
 
-        return self._get(sqla_obj_id, sqla_obj, options)
+        return self._get(sqla_obj_id, sqla_obj, options, **kwargs)
 
-    def find(self):
+    def find(self, **kwargs):
         """Return a query to fetch multiple objects."""
-        return self._dbsession.query(self._sqla_map)
+        return self._base_query(**kwargs)
 
     def serialize(self, items, **kwargs):
         """Transform the given list of `items` into an easily
