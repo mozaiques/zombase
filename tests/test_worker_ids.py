@@ -58,10 +58,10 @@ class TestWorkerIDs(unittest.TestCase):
 
     def test_init_without_id_or_uuid(self):
         foreman = FakeForeman()
-        a_worker = worker.ObjectManagingWorker(
+        a_worker = worker.MappingManagingWorker(
             foreman,
-            managed_object=FakeMapping,
-            managed_object_name='fake',
+            managed_sqla_map=FakeMapping,
+            managed_sqla_map_name='fake',
         )
 
         self.assertFalse(a_worker._with_id)
@@ -69,10 +69,10 @@ class TestWorkerIDs(unittest.TestCase):
 
     def test_init_with_id(self):
         foreman = FakeForeman()
-        a_worker = worker.ObjectManagingWorker(
+        a_worker = worker.MappingManagingWorker(
             foreman,
-            managed_object=FakeMappingWithID,
-            managed_object_name='fake',
+            managed_sqla_map=FakeMappingWithID,
+            managed_sqla_map_name='fake',
         )
 
         self.assertTrue(a_worker._with_id)
@@ -80,10 +80,10 @@ class TestWorkerIDs(unittest.TestCase):
 
     def test_init_with_uuid(self):
         foreman = FakeForeman()
-        a_worker = worker.ObjectManagingWorker(
+        a_worker = worker.MappingManagingWorker(
             foreman,
-            managed_object=FakeMappingWithUUID,
-            managed_object_name='fake',
+            managed_sqla_map=FakeMappingWithUUID,
+            managed_sqla_map_name='fake',
         )
 
         self.assertTrue(a_worker._with_uuid)
@@ -91,20 +91,20 @@ class TestWorkerIDs(unittest.TestCase):
 
     def test_init_forced(self):
         foreman = FakeForeman()
-        a_worker = worker.ObjectManagingWorker(
+        a_worker = worker.MappingManagingWorker(
             foreman,
-            managed_object=FakeMapping,
-            managed_object_name='fake',
+            managed_sqla_map=FakeMapping,
+            managed_sqla_map_name='fake',
             id_type='uuid',
         )
 
         self.assertTrue(a_worker._with_uuid)
         self.assertFalse(a_worker._with_id)
 
-        a_second_worker = worker.ObjectManagingWorker(
+        a_second_worker = worker.MappingManagingWorker(
             foreman,
-            managed_object=FakeMapping,
-            managed_object_name='fake',
+            managed_sqla_map=FakeMapping,
+            managed_sqla_map_name='fake',
             id_type='id',
         )
 
@@ -112,9 +112,9 @@ class TestWorkerIDs(unittest.TestCase):
         self.assertFalse(a_second_worker._with_uuid)
 
         with self.assertRaises(AttributeError):
-            worker.ObjectManagingWorker(
+            worker.MappingManagingWorker(
                 foreman,
-                managed_object=FakeMapping,
-                managed_object_name='fake',
+                managed_sqla_map=FakeMapping,
+                managed_sqla_map_name='fake',
                 id_type='wrong',
             )

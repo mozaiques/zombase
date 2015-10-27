@@ -4,11 +4,11 @@ from zombase import worker
 import test_worker
 
 
-class InvalidWorker(worker.ObjectManagingWorker):
+class InvalidWorker(worker.MappingManagingWorker):
     pass
 
 
-class Worker(worker.ObjectManagingWorker):
+class Worker(worker.MappingManagingWorker):
 
     def _serialize_one(self, item):
         return {'a_prop': item.a_prop}
@@ -20,8 +20,8 @@ class TestInvalidWorker(test_worker.BaseTestWorker):
         foreman = test_worker.FakeForeman()
         a_worker = InvalidWorker(
             foreman,
-            managed_object=test_worker.FakeMapping,
-            managed_object_name='fake',
+            managed_sqla_map=test_worker.FakeMapping,
+            managed_sqla_map_name='fake',
         )
 
         with self.assertRaises(NotImplementedError):
@@ -34,8 +34,8 @@ class TestSerialize(test_worker.BaseTestWorker):
         foreman = test_worker.FakeForeman()
         self.a_worker = Worker(
             foreman,
-            managed_object=test_worker.FakeMapping,
-            managed_object_name='fake',
+            managed_sqla_map=test_worker.FakeMapping,
+            managed_sqla_map_name='fake',
         )
         test_worker.BaseTestWorker.setUp(self)
 

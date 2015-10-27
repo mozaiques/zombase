@@ -67,12 +67,18 @@ class TestObjectManagingWorker(BaseTestWorker):
 
     def test_init(self):
         foreman = FakeForeman()
-        worker.ObjectManagingWorker(
-            foreman, managed_object=FakeMapping, managed_object_name='fake')
+        worker.MappingManagingWorker(
+            foreman,
+            managed_sqla_map=FakeMapping,
+            managed_sqla_map_name='fake',
+        )
 
     def test__get(self):
         foreman = FakeForeman()
-        a_worker = worker.ObjectManagingWorker(
-            foreman, managed_object=FakeMapping, managed_object_name='fake')
+        a_worker = worker.MappingManagingWorker(
+            foreman,
+            managed_sqla_map=FakeMapping,
+            managed_sqla_map_name='fake',
+        )
 
-        a_worker._get(instance=FakeMapping())
+        a_worker._get(sqla_obj=FakeMapping())
