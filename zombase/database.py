@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 import json
+import time
 import uuid
 
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.types import TypeDecorator, VARCHAR, CHAR
+
+
+PG_BIGINT_GAP = pow(2, 63)
+
+
+class ResourceLockUnavailable(Exception):
+    pass
 
 
 class MetaBase(object):
@@ -67,6 +75,42 @@ def db_method(func):
         return retval
 
     return wrapped_commit_func
+
+
+def _release_all_locks(dbsession):
+    dbsession.execute('SELECT pg_advisory_unlock_all();')
+
+
+def _obtain_locks_from_uuids(dbsession, uuids):
+    ints_to_lock = []
+    for a_uuid in uuids:
+        ints_to_lock.append(
+            int.from_bytes(a_uuid.bytes[:8], byteorder='big') - PG_BIGINT_GAP)
+        ints_to_lock.append(
+            int.from_bytes(a_uuid.bytes[8:], byteorder='big') - PG_BIGINT_GAP)
+    ints_to_lock.sort()
+
+    for _ in range(10):
+        all_acquired = False
+
+        for an_int in ints_to_lock:
+            res_proxy = dbsession.execute(
+                'SELECT pg_try_advisory_lock({});'.format(an_int)
+            )
+            acquired = res_proxy.first().items()[0][1]
+
+            if not acquired:
+                _release_all_locks(dbsession)
+                time.sleep(0.01)
+                break
+        else:
+            all_acquired = True
+
+        if all_acquired:
+            break
+
+    else:
+        raise ResourceLockUnavailable
 
 
 class JSONType(TypeDecorator):
