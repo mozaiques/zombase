@@ -77,11 +77,11 @@ def db_method(func):
     return wrapped_commit_func
 
 
-def _release_all_locks(dbsession):
+def release_all_locks(dbsession):
     dbsession.execute('SELECT pg_advisory_unlock_all();')
 
 
-def _obtain_locks_from_uuids(dbsession, uuids):
+def obtain_locks_from_uuids(dbsession, uuids):
     ints_to_lock = []
     for a_uuid in uuids:
         ints_to_lock.append(
@@ -100,7 +100,7 @@ def _obtain_locks_from_uuids(dbsession, uuids):
             acquired = res_proxy.first().items()[0][1]
 
             if not acquired:
-                _release_all_locks(dbsession)
+                release_all_locks(dbsession)
                 time.sleep(0.01)
                 break
         else:
