@@ -95,7 +95,7 @@ def obtain_locks_from_uuids(dbsession, uuids):
 
         for an_int in ints_to_lock:
             res_proxy = dbsession.execute(
-                'SELECT pg_try_advisory_lock({});'.format(an_int)
+                'SELECT pg_try_advisory_xact_lock({});'.format(an_int)
             )
             acquired = res_proxy.first().items()[0][1]
 
