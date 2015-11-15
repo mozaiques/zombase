@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 import unittest
 import uuid
 
-from voluptuous import Schema, MultipleInvalid, Required
+from voluptuous import Schema, MultipleInvalid, Required, Invalid
 
 from zombase import validation
 
@@ -94,6 +95,33 @@ class TestIntegeable(unittest.TestCase):
 
         with self.assertRaises(MultipleInvalid):
             schema(None)
+
+
+class TestDateable(unittest.TestCase):
+
+    def test_simple_no_cast(self):
+        schema = Schema(validation.Dateable())
+        self.assertEqual(
+            schema(datetime.date(2015, 11, 13)), datetime.date(2015, 11, 13))
+
+    def test_simple_cast(self):
+        schema = Schema(validation.Dateable())
+        self.assertEqual(schema('2015-11-13'), datetime.date(2015, 11, 13))
+
+    def test_cast_w_format(self):
+        schema = Schema(validation.Dateable(format='%Y%m%d'))
+        self.assertEqual(schema('20151113'), datetime.date(2015, 11, 13))
+
+    def test_nocast_w_format(self):
+        schema = Schema(validation.Dateable(cast=False, format='%Y%m%d'))
+        value = '20151113'
+        nocast = schema('20151113')
+        self.assertEqual(nocast, value)
+
+    def test_wrong_choice_in_dict(self):
+        schema = Schema(validation.Dateable())
+        with self.assertRaises(Invalid):
+            schema('20151113')
 
 
 class TestChoice(unittest.TestCase):

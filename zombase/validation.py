@@ -3,6 +3,7 @@
 voluptuous.
 
 """
+import datetime
 import decimal
 import re
 import uuid
@@ -92,6 +93,28 @@ def Decimable(empty_to_none=False, cast=True, msg=None):
 
         if cast:
             return casted_value
+        return value
+    return f
+
+
+def Dateable(empty_to_none=False, cast=True, format=None, msg=None):
+    if format is None:
+        format = '%Y-%m-%d'
+
+    def f(value):
+        if value in [None, ''] and empty_to_none:
+            return None
+
+        if isinstance(value, datetime.date):
+            return value
+
+        try:
+            casted_value = datetime.datetime.strptime(value, format)
+        except ValueError:
+            raise Invalid(msg or 'Given value cannot be casted to a date.')
+
+        if cast:
+            return casted_value.date()
         return value
     return f
 
