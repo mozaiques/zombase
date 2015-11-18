@@ -16,25 +16,27 @@ class TestUUID(unittest.TestCase):
         self.assertFalse(validation.is_valid_uuid('bla'))
 
 
-class TestEmail(unittest.TestCase):
+class TestMail(unittest.TestCase):
 
-    def test_email(self):
-        schema = Schema(validation.Email())
+    def test_mail(self):
+        schema = Schema(validation.Mail())
         schema('a@b.cc')
 
-    def test_other_email(self):
-        schema = Schema(validation.Email())
+    def test_other_mail(self):
+        schema = Schema(validation.Mail())
         schema('a+d@b.cc')
+        schema('a+d@dudouze.paris')
+        schema('a+d@joebla.dudouze.paris')
 
-    def test_lower_email(self):
-        schema = Schema(validation.Email())
-        schema_lower = Schema(validation.Email(lower=True))
+    def test_lower_mail(self):
+        schema = Schema(validation.Mail())
+        schema_lower = Schema(validation.Mail(lower=True))
 
         self.assertEqual(schema('aZ@b.cc'), 'aZ@b.cc')
         self.assertEqual(schema_lower('aZ@b.cc'), 'az@b.cc')
 
-    def test_invalid_email(self):
-        schema = Schema(validation.Email())
+    def test_invalid_mail(self):
+        schema = Schema(validation.Mail())
 
         with self.assertRaises(MultipleInvalid):
             schema('a a@b.c')

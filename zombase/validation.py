@@ -25,20 +25,19 @@ def is_valid_uuid(value):
     return maybe_value.hex == value.replace('-', '').replace(' ', '')
 
 
-_email_regexp = re.compile("^[A-Za-z0-9_\-\.\+]+\@(\[?)[a-zA-Z0-9\-\.]"
-                           "+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$")
+_mail_regexp = re.compile('[^@]+@[^@]+\.[^@]+')
 
 
-def is_valid_email(raw_email):
-    if re.match(_email_regexp, raw_email):
+def is_valid_mail(raw_mail):
+    if re.match(_mail_regexp, raw_mail) and ' ' not in raw_mail:
         return True
     return False
 
 
-def Email(msg=None, lower=False):
+def Mail(msg=None, lower=False):
     def f(value):
-        if not is_valid_email(value):
-            raise Invalid(msg or ('Incorrect email address.'))
+        if not is_valid_mail(value):
+            raise Invalid(msg or ('Incorrect mail address.'))
 
         if lower:
             return value.lower()
