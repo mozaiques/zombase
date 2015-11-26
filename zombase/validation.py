@@ -47,7 +47,7 @@ def Mail(msg=None, lower=False):
 
 def Floatable(empty_to_none=False, cast=True, msg=None):
     def f(value):
-        if not value and empty_to_none:
+        if value in [None, ''] and empty_to_none:
             return None
 
         try:
@@ -63,7 +63,7 @@ def Floatable(empty_to_none=False, cast=True, msg=None):
 
 def Integeable(empty_to_none=False, cast=True, msg=None):
     def f(value):
-        if not value and empty_to_none:
+        if value in [None, ''] and empty_to_none:
             return None
 
         try:
