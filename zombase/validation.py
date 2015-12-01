@@ -34,8 +34,11 @@ def is_valid_mail(raw_mail):
     return False
 
 
-def Mail(msg=None, lower=False):
+def Mail(empty_to_none=False, msg=None, lower=False):
     def f(value):
+        if value in [None, ''] and empty_to_none:
+            return None
+
         if not is_valid_mail(value):
             raise Invalid(msg or ('Incorrect mail address.'))
 
