@@ -89,7 +89,11 @@ def Decimable(empty_to_none=False, cast=True, msg=None):
             return None
 
         try:
-            casted_value = decimal.Decimal(value)
+            if isinstance(value, float):
+                casted_value = decimal.getcontext()\
+                    .create_decimal_from_float(value)
+            else:
+                casted_value = decimal.Decimal(value)
         except decimal.InvalidOperation:
             raise Invalid(msg or 'Given value cannot be casted to a decimal.')
 
