@@ -103,8 +103,8 @@ def cached_property(kt, keystores_kt=None, cache=None, validity=None):
 
             # If we have the value in cache, depending on `validity`,
             # we just return it.
-            if (not isinstance(cached_value, NoValue)
-                    and is_valid(cached_value_timestamp, validity)):
+            if (not isinstance(cached_value, NoValue) and
+                    is_valid(cached_value_timestamp, validity)):
                 return cached_value
 
             # Run the computation

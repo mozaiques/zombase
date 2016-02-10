@@ -170,11 +170,11 @@ class TestAdaptDict(unittest.TestCase):
 
         def the_assert(output_dict):
             for key in output_dict:
-                if (str(key) == 'to_make_required'
-                        and not isinstance(key, Required)):
+                if (str(key) == 'to_make_required' and
+                        not isinstance(key, Required)):
                     return False
-                elif (str(key) != 'to_make_required'
-                        and isinstance(key, Required)):
+                elif (str(key) != 'to_make_required' and
+                        isinstance(key, Required)):
                     return False
             return True
         self.assertTrue(the_assert(output_dict))
