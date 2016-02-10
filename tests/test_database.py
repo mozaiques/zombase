@@ -21,7 +21,7 @@ class TestDatabase(unittest.TestCase):
 
     def setUp(self):
         self.dbsession = self.FakeDbSession()
-        self.worker = self.TestedWorker(self.dbsession, check_sanity=False)
+        self.worker = self.TestedWorker(self.dbsession)
 
     def tearDown(self):
         del self.dbsession

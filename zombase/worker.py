@@ -8,11 +8,7 @@ class RawWorker(object):
     """Deepest worker, root of all the interactions, only ensure there
     a sqlalchemy database session is available in `self._dbsession`."""
 
-    def __init__(self, dbsession, check_sanity=True):
-        if check_sanity and not hasattr(dbsession, 'cache'):
-            raise ValueError(
-                'Cache region not associated w/ database session.')
-
+    def __init__(self, dbsession):
         self._dbsession = dbsession
 
 

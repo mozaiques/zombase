@@ -4,16 +4,9 @@ import unittest
 from zombase import worker
 
 
-class FakeCache(object):
-    pass
-
-
 class FakeDbSession(object):
-    def __init__(self, with_cache=False):
+    def __init__(self):
         self.has_been_committed = False
-
-        if with_cache:
-            self.cache = FakeCache()
 
     def commit(self):
         self.has_been_committed = True
@@ -22,7 +15,7 @@ class FakeDbSession(object):
 class FakeForeman(object):
 
     def __init__(self):
-        self._dbsession = FakeDbSession(with_cache=True)
+        self._dbsession = FakeDbSession()
 
 
 class FakeMapping(object):
@@ -42,14 +35,8 @@ class BaseTestWorker(unittest.TestCase):
 
 class TestRawWorker(BaseTestWorker):
 
-    def test_sanity(self):
-        worker.RawWorker(self.dbsession, check_sanity=False)
-
-        with self.assertRaises(ValueError):
-            worker.RawWorker(self.dbsession)
-
-        dbsession_w_cache = FakeDbSession(with_cache=True)
-        worker.RawWorker(dbsession_w_cache)
+    def test_init(self):
+        worker.RawWorker(self.dbsession)
 
 
 class TestSupervisedWorker(BaseTestWorker):
