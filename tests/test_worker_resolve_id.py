@@ -5,7 +5,6 @@ import uuid
 from sqlalchemy import create_engine, Column, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from dogpile.cache import make_region
 from voluptuous import Schema
 
 from zombase import database, foreman, mapping, worker
@@ -41,8 +40,6 @@ class TestWorkerResolveID(unittest.TestCase):
 
         Session = sessionmaker(bind=engine)
         dbsession = Session()
-        cache = make_region().configure('dogpile.cache.memory')
-        setattr(dbsession, 'cache', cache)
         a_foreman = foreman.RawForeman(dbsession=dbsession)
         self.worker = worker.MappingManagingWorker(
             a_foreman,

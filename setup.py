@@ -19,10 +19,9 @@ setup(
     packages=find_packages(),
     test_suite='tests',
     install_requires=[
-        'SQLAlchemy>=0.9',
+        'SQLAlchemy>=1.0',
         'voluptuous>=0.8',
-        'dogpile.cache>=0.5',
-        'six>=1.7',
+        'six>=1.10',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

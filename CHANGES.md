@@ -1,6 +1,12 @@
 zombase Changelog
 =================
 
+Version 0.8.0
+------------
+
+- Remove cache support
+- Add guard to Decimable/Floatable to avoid NaN
+
 Version 0.4.0
 ------------
 

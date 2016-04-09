@@ -5,6 +5,7 @@ voluptuous.
 """
 import datetime
 import decimal
+import math
 import re
 import uuid
 
@@ -48,22 +49,6 @@ def Mail(empty_to_none=False, msg=None, lower=False):
     return f
 
 
-def Floatable(empty_to_none=False, cast=True, msg=None):
-    def f(value):
-        if value in [None, ''] and empty_to_none:
-            return None
-
-        try:
-            casted_value = float(value)
-        except (ValueError, TypeError):
-            raise Invalid(msg or 'Given value cannot be casted to float.')
-
-        if cast:
-            return casted_value
-        return value
-    return f
-
-
 def Integeable(empty_to_none=False, cast=True, msg=None):
     def f(value):
         if value in [None, ''] and empty_to_none:
@@ -83,7 +68,26 @@ def Integeable(empty_to_none=False, cast=True, msg=None):
     return f
 
 
-def Decimable(empty_to_none=False, cast=True, msg=None):
+def Floatable(empty_to_none=False, cast=True, nan_allowed=False, msg=None):
+    def f(value):
+        if value in [None, ''] and empty_to_none:
+            return None
+
+        try:
+            casted_value = float(value)
+        except (ValueError, TypeError):
+            raise Invalid(msg or 'Given value cannot be casted to float.')
+
+        if not nan_allowed and math.isnan(casted_value):
+            raise Invalid(msg or 'Given value is NaN.')
+
+        if cast:
+            return casted_value
+        return value
+    return f
+
+
+def Decimable(empty_to_none=False, cast=True, nan_allowed=False, msg=None):
     def f(value):
         if value in [None, ''] and empty_to_none:
             return None
@@ -96,6 +100,9 @@ def Decimable(empty_to_none=False, cast=True, msg=None):
                 casted_value = decimal.Decimal(value)
         except decimal.InvalidOperation:
             raise Invalid(msg or 'Given value cannot be casted to a decimal.')
+
+        if not nan_allowed and math.isnan(casted_value):
+            raise Invalid(msg or 'Given value is NaN.')
 
         if cast:
             return casted_value

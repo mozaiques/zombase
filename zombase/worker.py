@@ -5,7 +5,7 @@ from zombase.errors import ZombaseRuntimeError
 
 
 class RawWorker(object):
-    """Deepest worker, root of all the interactions, only ensure there
+    """Deepest worker, root of all the interactions, only ensure that
     a sqlalchemy database session is available in `self._dbsession`."""
 
     def __init__(self, dbsession):
