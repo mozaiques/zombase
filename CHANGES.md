@@ -1,6 +1,11 @@
 zombase Changelog
 =================
 
+Version 0.8.1
+------------
+
+- Add `ignore_keys` to `zombase.mapping.update`
+
 Version 0.8.0
 ------------
 

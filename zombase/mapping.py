@@ -7,7 +7,7 @@ from voluptuous import Schema
 from zombase.database import MetaBase
 
 
-def update(sqla_obj, schema, **kwargs):
+def update(sqla_obj, schema, ignore_keys=None, **kwargs):
     """Update an `instance`. Return False if there is no update and
     True otherwise.
 
@@ -18,14 +18,19 @@ def update(sqla_obj, schema, **kwargs):
     Keyword arguments:
         sqla_obj -- SQLAlchemy object to update
         schema -- voluptuous schema to perform data validation
+        ignore_keys -- list of keys that will be ignored by this
+                       function
 
     """
     if not isinstance(schema, Schema):
         raise AttributeError('`schema` must be a voluptuous schema.')
 
+    if ignore_keys is None:
+        ignore_keys = []
+
     # Explicitely cast to string properties which come from schema
     # to deal with `voluptuous.Required` stuff.
-    schema_keys = set([str(k) for k in schema.schema])
+    schema_keys = set([str(k) for k in schema.schema if k not in ignore_keys])
 
     obj_current_dict = {
         k: getattr(sqla_obj, k) for k in schema_keys
